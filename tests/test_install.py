@@ -13,7 +13,7 @@ spec.loader.exec_module(installer)
 class InstallTests(unittest.TestCase):
     def test_install_update_and_backup(self):
         with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / 'path with spaces' / 'skills' / 'unity-cli'
+            target = Path(tmp).resolve() / 'path with spaces' / 'skills' / 'unity-cli'
             installer.install(target)
             self.assertTrue((target / 'references/pipeline-package.md').is_file())
             metadata = json.loads((target / '.unity-cli-install.json').read_text())
@@ -26,13 +26,13 @@ class InstallTests(unittest.TestCase):
 
     def test_dry_run_does_not_write(self):
         with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / 'skills/unity-cli'
+            target = Path(tmp).resolve() / 'skills/unity-cli'
             installer.install(target, dry_run=True)
             self.assertFalse(target.parent.exists())
 
     def test_failed_replacement_restores_old_install(self):
         with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / 'skills/unity-cli'
+            target = Path(tmp).resolve() / 'skills/unity-cli'
             installer.install(target)
             (target / 'local.txt').write_text('keep')
             original_rename = Path.rename
@@ -60,7 +60,7 @@ class InstallTests(unittest.TestCase):
 
     def test_symlink_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
-            base = Path(tmp)
+            base = Path(tmp).resolve()
             actual = base / 'actual'
             actual.mkdir()
             link = base / 'linked'

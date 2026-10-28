@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-10-28
+
+- Add Claude Code and Codex Git-backed marketplaces, plus portable Agent Plugins packaging.
+- Support OMP marketplace installation through the Claude-compatible catalog.
+- Make native install/update flows the default; add an OpenCode skills CLI option.
+- Rewrite repository and plugin descriptions around practical Unity workflows.
+- Clarify repository marketplaces versus the universal public plugin directory.
+
 ## 1.0.1 — 2026-10-28
 
 - Resolve macOS temporary-directory aliases in tests while preserving linked-destination refusal.

@@ -1,103 +1,126 @@
-# Unity CLI Skill
+# Unity CLI
 
-A portable [Agent Skills](https://agentskills.io/specification) package for Unity CLI and Unity Pipeline automation. Works with Claude Code, Codex, OpenCode, and **Oh My Pi (omp)**. Community-maintained; not an official Unity product.
+**Bring your coding agent into Unity.**
 
-The skill covers Editor/module management, projects, builds, tests, CI and live Editor/Player control. Its guidance was checked on **2026-10-28**, using local **Unity CLI 1.0.0-beta.14** help and official **Pipeline 0.9.1-exp.1** documentation. Older versions need live command discovery. This release includes the corrections listed in [CHANGELOG.md](CHANGELOG.md).
+Go from “what does this project need?” to a working Editor, a verified build, or a useful test report—without teaching your agent Unity's command-line workflow every time.
 
-## Quick install
+Unity CLI is a skill plugin for **Claude Code, Codex, and Oh My Pi**, with a portable skill for **OpenCode and other Agent Skills clients**. It helps your agent use the standalone Unity CLI and Unity Pipeline with the right project, version, and verification steps.
 
-Prerequisites: Git and Python 3.9+ (`python`, `python3`, or `py -3` as available). Unity CLI must be installed separately using [Unity's instructions](https://docs.unity.com/en-us/unity-cli/use-unity-cli).
+[Install](#install) · [Update](#update) · [Try it](#try-it) · [Changelog](CHANGELOG.md)
 
-```sh
-git clone https://github.com/BillyPung/unity-cli-skill.git
-cd unity-cli-skill
-python scripts/install.py --client codex
+## What you can do
+
+- **Get a project ready.** Find its Editor version, inspect modules, and prepare the setup it needs.
+- **Work with the open Editor.** Inspect scenes and assets, use registered Pipeline commands, and verify saved changes.
+- **Build with context.** Select the target or build profile, check requirements, and verify the output.
+- **Make tests useful.** Run the relevant suite, read its report, and distinguish failing tests from a failed test run.
+- **Keep the team in sync.** Install once through your agent's marketplace and receive versioned skill updates.
+
+This plugin supplies instructions and reference material. Install [Unity CLI](https://docs.unity.com/en-us/unity-cli/use-unity-cli) separately. Live Editor control also needs Unity 6+ and the project's Pipeline package. Community maintained; not affiliated with Unity Technologies.
+
+## Install
+
+### Claude Code
+
+Run inside Claude Code:
+
+```text
+/plugin marketplace add BillyPung/unity-cli-skill
+/plugin install unity-cli@unity-cli-skills
 ```
 
-Replace `codex` with `claude`, `opencode`, `omp`, or `generic`. Commands work in PowerShell, Bash and zsh; substitute your Python launcher if necessary. To install for several clients, run the installer once for each. It copies only the portable skill folder, not this entire repository.
+Start a new session, then invoke `/unity-cli:unity-cli` or ask Claude to use the Unity CLI skill.
 
-The installer replaces the selected skill directory and **preserves the previous directory in a timestamped backup outside the client's skills discovery root**. This includes local customizations. Backups are never automatically deleted. It prints both paths. Use `--dry-run` to preview before changing files. Linked destination paths are refused; use the manual method if you intentionally manage symlinks.
+### Codex / ChatGPT desktop
 
-## Update in seconds
+In the plugin browser, choose **Add plugin marketplace** and enter:
 
-From the original checkout, run these commands in order. Stop if `git pull` fails:
-
-```sh
-git pull --ff-only
-python scripts/install.py --client codex
+```text
+https://github.com/BillyPung/unity-cli-skill
 ```
 
-Use the same client and scope as your installation. Repeat the installer for other client copies. Do not merge an update into a locally modified checkout blindly: keep local adaptations on a branch. Installation does not update Unity CLI, Editors or Pipeline packages.
+Select **Unity CLI Skills**, open **Unity CLI**, and install it. Start a new chat and select the installed plugin. Use the repository URL, not the raw marketplace JSON URL. Labels and repository-marketplace support can vary by client version and workspace policy.
 
-**Message to send coworkers:**
-
-> Please update from https://github.com/BillyPung/unity-cli-skill: run `git pull --ff-only` in your checkout, then `python scripts/install.py --client YOUR_CLIENT`. Supported clients: `claude`, `codex`, `opencode`, `omp`. Start a fresh agent session if the update is not detected.
-
-For a pinned team version, use `git checkout v1.0.1` before installation. To return to current development: `git switch main`, then pull and reinstall. Private repositories require GitHub access and a working Git credential helper or SSH; never put a token into the clone URL.
-
-## Supported locations
-
-| Client option | User installation | With `--project /path/to/project` |
-| --- | --- | --- |
-| `generic` | `~/.agents/skills/unity-cli` | `.agents/skills/unity-cli` |
-| `codex` | `~/.agents/skills/unity-cli` | `.agents/skills/unity-cli` |
-| `claude` | `~/.claude/skills/unity-cli` | `.claude/skills/unity-cli` |
-| `opencode` | `~/.config/opencode/skills/unity-cli` | `.opencode/skills/unity-cli` |
-| `omp` | `~/.omp/agent/skills/unity-cli` | `.omp/skills/unity-cli` |
-| `codex-legacy` | `$CODEX_HOME/skills/unity-cli`, default `~/.codex/skills/unity-cli` | `.codex/skills/unity-cli` |
-
-`~` means your user home; Windows examples resolve under your user profile. Current Codex documentation uses `.agents/skills`; `codex-legacy` is provided for installations still using the older path, not as the recommended path for new clients. Avoid keeping stale same-named copies in both locations.
-
-The global installer honors `CLAUDE_CONFIG_DIR`, `XDG_CONFIG_HOME`, and `CODEX_HOME` for their corresponding options. For OMP profiles, custom configuration roots, or another Agent Skills host, specify its exact supported destination:
+For Codex CLI, run from your terminal:
 
 ```sh
-python scripts/install.py --destination /custom/skills/unity-cli
-python scripts/install.py --client claude --project /path/to/your/unity-project
+codex plugin marketplace add BillyPung/unity-cli-skill
+codex plugin add unity-cli@unity-cli-skills
 ```
 
-OMP profile example: `--destination ~/.omp/profiles/PROFILE/agent/skills/unity-cli`. In PowerShell use `--destination "$HOME/.omp/profiles/PROFILE/agent/skills/unity-cli"`. OMP's foreign user providers can be opt-in, so its native `omp` destination is the reliable default.
+This repository is an installable **Git-backed marketplace**. It has not been submitted to or approved for the universal public ChatGPT/Codex Plugins Directory. Adding this repository makes it available through its own marketplace source; it does not create a central directory listing.
 
-The Agent Skills specification defines the folder format, **not a universal installation directory**. `generic` uses the common `.agents/skills` convention; verify discovery rules for any other host. All clients receive the same `SKILL.md` and references with no host-specific permission grants.
+### Oh My Pi (omp)
 
-## Manual installation (no Python)
+Run inside OMP:
 
-Copy the whole `skills/unity-cli` directory into one location from the table, keeping `SKILL.md` directly inside `unity-cli`. Preserve any old copy elsewhere before replacing it. Include `references/`; copying only `SKILL.md` breaks its links. For updates, pull the repository, then replace the complete installed folder. A reviewed symlink to the source folder is another option on hosts that support it; then a successful pull updates that link's content directly.
+```text
+/marketplace add BillyPung/unity-cli-skill
+/marketplace install unity-cli@unity-cli-skills
+/reload-plugins
+```
 
-## Verify and use
+OMP reads the Claude-compatible catalog included here and discovers the portable plugin's skills.
 
-Start a fresh session if your client does not detect changed skills. Ask: **"Use the unity-cli skill to inspect my Unity CLI version and available commands without modifying my project."**
+### OpenCode and other Agent Skills clients
 
-- Claude Code: `/unity-cli`.
-- Codex: `$unity-cli`, or select it from `/skills` where available.
-- OpenCode: ask the agent to load the `unity-cli` skill through its skill tool.
-- OMP: `/skill:unity-cli` when skill commands are enabled.
-
-Each installed copy has `.unity-cli-install.json` with its package version and Git commit (null for a ZIP without Git metadata). Verify with `unity --version` separately. A portable file install does not bypass host workspace trust or tool permissions.
-
-If discovery fails, check the folder depth, whether skills are enabled, and duplicate copies in project/user/plugin locations. An older skill installed by `unity skill install` can shadow this one; choose which source you maintain. Do not use `unity skill refresh` to update this repository's skill.
-
-## Rollback or uninstall
-
-To roll back, move the current `unity-cli` folder aside, then move the printed backup directory back to the original destination. For a repository release rollback, check out the earlier tag and reinstall. To uninstall, remove only the installed `unity-cli` folder; preserve backups you still need. No Unity installation, project, account, or license is changed by this installer.
-
-## Maintaining this package
-
-Edit the single source at `skills/unity-cli/`, update `VERSION`, frontmatter version and changelog, then run:
+Using the [community skills CLI](https://github.com/vercel-labs/skills), with Node.js 22.20+:
 
 ```sh
-python -m unittest discover -s tests -v
+npx skills add BillyPung/unity-cli-skill --skill unity-cli -a opencode -g
 ```
 
-Review local CLI help and official package documentation before adding commands. Add a tag for a reviewed release. The GitHub workflow runs installer tests on Windows, macOS and Linux. Documentation checks are a baseline; Pipeline behavior still needs validation in a matching Editor/project.
+Omit `-a opencode` to select another supported client interactively. Omit `-g` for a project install. This installs the portable skill rather than a Claude/Codex plugin. The [Agent Skills standard](https://agentskills.io/specification) defines the skill format; each client controls discovery and installation.
 
-## Sources
+## Update
 
-- [Agent Skills format](https://agentskills.io/specification)
-- [Claude Code skills](https://code.claude.com/docs/en/skills)
-- [Codex skill discovery](https://learn.chatgpt.com/docs/build-skills)
-- [OpenCode skills](https://docs.opencode.ai/docs/skills/)
-- [OMP skills](https://github.com/can1357/oh-my-pi/blob/main/docs/skills.md) and [configuration/profiles](https://github.com/can1357/oh-my-pi/blob/main/docs/config-usage.md)
-- [Unity CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) and [release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
-- [Pipeline command index](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html)
+Use the same manager you installed with:
 
-Documentation is summarized in original guidance; Unity binaries and third-party manuals are not bundled. MIT license applies to this repository's authored files.
+| Client | Update |
+| --- | --- |
+| Claude Code | `/plugin marketplace update unity-cli-skills`, then `/plugin update unity-cli@unity-cli-skills` |
+| Codex desktop | Refresh the **Unity CLI Skills** marketplace in the plugin browser and apply the plugin update when offered. |
+| Codex CLI | `codex plugin marketplace upgrade unity-cli-skills`, then `codex plugin add unity-cli@unity-cli-skills` |
+| OMP | `/marketplace update unity-cli-skills`, then `/marketplace upgrade unity-cli@unity-cli-skills`, then `/reload-plugins` |
+| Skills CLI | `npx skills update unity-cli` |
+
+Start a new chat/session if your client still shows the old version. These steps update this skill plugin; Editor, CLI and Pipeline upgrades remain separate decisions.
+
+**Send coworkers this:**
+
+> Install Unity CLI from the marketplace at https://github.com/BillyPung/unity-cli-skill. The README has native install and update commands for Claude Code, Codex and OMP, plus an OpenCode skill option.
+
+## Try it
+
+> Inspect this Unity project and tell me which Editor and modules it needs. Make no changes yet.
+
+> Run the Edit Mode tests and explain the failures using the test report.
+
+> Connect to this project's open Editor, inspect the scene, and check the console for errors.
+
+The skill discovers the commands exposed by your installed versions. Its guidance was reviewed on **2026-10-28** against **Unity CLI 1.0.0-beta.14** help and **Pipeline 0.9.1-exp.1** documentation. Older versions need command discovery; a newer plugin version does not require upgrading your project.
+
+## Already installed a loose skill?
+
+If you used the earlier file-copy installer, preserve any customizations, then remove or disable that loose `unity-cli` copy after installing the marketplace plugin. Otherwise your client may show two skills or keep selecting stale instructions. See [manual skill locations](docs/manual-skills.md) to locate it. Marketplace plugins should be updated through their manager, not by editing cache files or running the old Python installer.
+
+## Package layout
+
+One skill source, multiple native entry points:
+
+```text
+plugin.json                         Portable Agent Plugins package
+.claude-plugin/plugin.json          Claude Code plugin
+.claude-plugin/marketplace.json     Claude Code / OMP marketplace
+.codex-plugin/plugin.json           Codex compatibility manifest
+.agents/plugins/marketplace.json    Codex marketplace
+skills/unity-cli/                   Shared skill and references
+```
+
+For maintenance, keep versions synchronized across manifests, catalogs, `VERSION`, and skill metadata. Existing installer files remain for older checkouts; marketplace installation needs neither Python nor a manual clone.
+
+## References
+
+[Unity CLI](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) · [Pipeline](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html) · [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) · [OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins) · [OMP marketplaces](https://github.com/can1357/oh-my-pi/blob/main/docs/marketplace.md)
+
+MIT licensed. Unity binaries and third-party documentation are not bundled.

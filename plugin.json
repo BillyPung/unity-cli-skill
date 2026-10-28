@@ -1,0 +1,37 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "unity-cli",
+  "version": "1.1.0",
+  "description": "Bring your coding agent into Unity: inspect projects, drive the Editor, and build and test with current CLI guidance.",
+  "author": {
+    "name": "BillyPung"
+  },
+  "homepage": "https://github.com/BillyPung/unity-cli-skill",
+  "repository": "https://github.com/BillyPung/unity-cli-skill",
+  "license": "MIT",
+  "keywords": [
+    "unity",
+    "unity-cli",
+    "pipeline",
+    "game-development",
+    "skills"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Unity CLI",
+        "shortDescription": "Unity, from your coding agent",
+        "longDescription": "Keep Unity work moving from your coding agent. Inspect a project, prepare its Editor, run builds and tests, and work with a live Editor through Unity Pipeline. The bundled skill checks installed commands and project versions before acting, then verifies the result.",
+        "developerName": "BillyPung",
+        "category": "Productivity",
+        "capabilities": [],
+        "websiteURL": "https://github.com/BillyPung/unity-cli-skill",
+        "defaultPrompt": [
+          "Inspect my Unity project and tell me what is ready to build.",
+          "Run the relevant Unity tests and explain any failures.",
+          "Connect to my running Unity Editor and inspect the scene."
+        ]
+      }
+    }
+  }
+}

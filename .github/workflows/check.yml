@@ -1,4 +1,4 @@
-name: Check package
+name: Check marketplace package
 on: [push, pull_request]
 jobs:
   installer:

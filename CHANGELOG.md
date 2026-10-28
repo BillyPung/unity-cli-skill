@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 — 2026-10-28
+
+- Resolve macOS temporary-directory aliases in tests while preserving linked-destination refusal.
+- Verify installer tests on GitHub-hosted Windows, macOS and Linux runners.
+
 ## 1.0.0 — 2026-10-28
 
 - Refresh guidance for Unity CLI 1.0.0-beta.14 and Pipeline docs 0.9.1-exp.1.

@@ -33,7 +33,7 @@ Use the same client and scope as your installation. Repeat the installer for oth
 
 > Please update from https://github.com/BillyPung/unity-cli-skill: run `git pull --ff-only` in your checkout, then `python scripts/install.py --client YOUR_CLIENT`. Supported clients: `claude`, `codex`, `opencode`, `omp`. Start a fresh agent session if the update is not detected.
 
-For a pinned team version, use `git checkout v1.0.0` before installation. To return to current development: `git switch main`, then pull and reinstall. Private repositories require GitHub access and a working Git credential helper or SSH; never put a token into the clone URL.
+For a pinned team version, use `git checkout v1.0.1` before installation. To return to current development: `git switch main`, then pull and reinstall. Private repositories require GitHub access and a working Git credential helper or SSH; never put a token into the clone URL.
 
 ## Supported locations
 

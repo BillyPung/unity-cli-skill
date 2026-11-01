@@ -6,7 +6,7 @@ Go from “what does this project need?” to a working Editor, a verified build
 
 Unity CLI is a skill plugin for **Claude Code, Codex, and Oh My Pi**, with a portable skill for **OpenCode and other Agent Skills clients**. It helps your agent use the standalone Unity CLI and Unity Pipeline with the right project, version, and verification steps.
 
-[Install](#install) · [Update](#update) · [Try it](#try-it) · [Changelog](CHANGELOG.md)
+[Install](#install) · [Update](#update) · [Supported versions](#supported-versions) · [Try it](#try-it) · [Changelog](CHANGELOG.md)
 
 ## What you can do
 
@@ -90,6 +90,34 @@ Start a new chat/session if your client still shows the old version. These steps
 
 > Install Unity CLI from the marketplace at https://github.com/BillyPung/unity-cli-skill. The README has native install and update commands for Claude Code, Codex and OMP, plus an OpenCode skill option.
 
+## Supported versions
+
+Last checked **2026-11-02**. This is the repository's documented compatibility baseline, not a tested matrix of every Editor/platform combination.
+
+| Component | Documented / checked baseline | Latest available when checked | Status |
+| --- | --- | --- | --- |
+| Unity CLI | **`1.0.0-beta.15`** — installed version, relevant command help and live update check verified locally | **`1.0.0-beta.15`** — live update feed and target release notes | Local CLI is current. Updating from the previous beta.14 baseline is available. Project build/test behavior is not a compatibility certification. |
+| Unity Pipeline (`com.unity.pipeline`) | `0.9.1-exp.1` — documentation reviewed | **`0.9.1-exp.1`** — live Unity package registry | No newer registry release found. Live Editor behavior was not tested in this review. |
+| Unity Editor | **Unity 6+** is the Pipeline prerequisite | Use the project's pinned version | Check the chosen package's requirements; do not upgrade the Editor just to match this skill. |
+
+The marketplace plugin's own version is separate from the CLI, Pipeline and Editor versions. Newer releases may work, but the agent must discover their commands rather than assume the baseline still applies. Older versions may lack documented features.
+
+### How the AI checks correctness and freshness
+
+Ask: **“Use the Unity CLI skill to check the installed CLI and this project's resolved Pipeline version against the live feeds. Report compatibility and available updates without making changes.”**
+
+The agent should:
+
+1. Run `unity --version` and inspect the relevant command help.
+2. Run `unity self-update --check --format json` to compare installed and latest CLI versions, and `unity changelog --target <version>` to inspect the target release. The public release-notes page still showed beta.14 when the live feed already offered beta.15.
+3. Run `unity pipeline list-versions --format json`, then inspect `Packages/manifest.json` and `Packages/packages-lock.json` in the intended project to distinguish requested source from resolved version.
+4. Preserve deliberate pins, compare prerelease versions semantically, check the Editor/package requirements and discover the running package's schema. A successful freshness check is not proof of project compatibility.
+5. Report installed/resolved/latest versions separately. If a feed cannot be reached, report freshness as unknown. Do not call an offline installation up to date.
+
+The skill includes concrete [CLI and Pipeline installation/update steps](skills/unity-cli/references/versions-and-setup.md). When setup or updating is requested, the agent should perform the authorized work and verify it. A check-only request should produce findings and a proposed change, without modifying installations or project packages.
+
+Sources: [official CLI install/update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli), [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes), [Pipeline documentation](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html), plus the live update/registry commands above.
+
 ## Try it
 
 > Inspect this Unity project and tell me which Editor and modules it needs. Make no changes yet.
@@ -98,7 +126,7 @@ Start a new chat/session if your client still shows the old version. These steps
 
 > Connect to this project's open Editor, inspect the scene, and check the console for errors.
 
-The skill discovers the commands exposed by your installed versions. Its guidance was reviewed on **2026-10-28** against **Unity CLI 1.0.0-beta.14** help and **Pipeline 0.9.1-exp.1** documentation. Older versions need command discovery; a newer plugin version does not require upgrading your project.
+The skill discovers the commands exposed by your installed versions. See [supported versions](#supported-versions) for the dated baseline and latest-version evidence. A newer skill plugin does not require upgrading your project.
 
 ## Already installed a loose skill?
 

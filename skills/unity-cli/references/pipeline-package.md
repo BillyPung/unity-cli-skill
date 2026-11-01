@@ -2,9 +2,11 @@
 
 Baseline: com.unity.pipeline 0.9.1-exp.1 documentation. Live commands require Unity 6+ and a compiled package. Preserve an existing package version unless an update is requested or necessary and authorized.
 
+The live registry still reported 0.9.1-exp.1 as latest on 2026-11-02. Use [versions and setup](versions-and-setup.md) to recheck the registry, inspect the project's resolved dependency, and install or upgrade within scope; this dated baseline is not a permanent latest-version assertion.
+
 ## Installation and discovery
 
-Inspect `pipeline install --help` first. CLI beta.14 uses `--version` for a package pin; older binaries used `--package-version`.
+Inspect `pipeline install --help` first. CLI beta.14/beta.15 use `--version` for a package pin; older binaries used `--package-version`.
 
 ```sh
 unity pipeline install --project-path <absolute-project>

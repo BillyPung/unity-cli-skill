@@ -31,4 +31,4 @@ Detached `command --detach` returns a job ID. Track that same job with `unity jo
 
 `ci init --dry-run` previews GitHub/GitLab workflow generation. Review writes before using `--overwrite`. Project defaults can live in `ProjectSettings/UnityCliConfig.json`; `config resolve <key> <project>` reports the winning layer. Explicit task flags should make critical values visible. Accelerator settings optimize imports but do not change correctness requirements. Keep signing/license/auth secrets in the CI secret store.
 
-Source: installed CLI beta.14 command help; [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference). For deeper binary-matched details use `unity skill show --path references/build-run-test.md`.
+Source: installed CLI beta.15 command help, rechecked 2026-11-02; [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference). For deeper binary-matched details use `unity skill show --path references/build-run-test.md`.

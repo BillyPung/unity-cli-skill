@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 — 2026-11-02
+
+- Check live Unity feeds: CLI beta.15 is available; Pipeline remains 0.9.1-exp.1.
+- Verify the user's newly installed beta.15 version, relevant command help and live freshness check locally.
+- Add a dated README compatibility table, separating upstream availability from locally checked help and documentation review.
+- Teach agents to inspect resolved project dependencies and recheck live feeds, pins, prereleases and command schemas.
+- Add explicit CLI/Pipeline install and update workflows, package-manager routing and post-change verification.
+- Account for beta.15 installers setting up coding agents, keeping that separate from CLI-only setup.
+
 ## 1.1.0 — 2026-10-28
 
 - Add Claude Code and Codex Git-backed marketplaces, plus portable Agent Plugins packaging.

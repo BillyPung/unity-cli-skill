@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. This skill was checked on 2026-10-28 against CLI 1.0.0-beta.14 and Pipeline documentation 0.9.1-exp.1. These are verification baselines, not mandatory upgrade targets.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-02 the live feeds reported CLI 1.0.0-beta.15 and Pipeline 0.9.1-exp.1. Installed CLI version, relevant command help and freshness were locally checked with beta.15; Pipeline guidance was reviewed against 0.9.1-exp.1 documentation, not exercised in an Editor. Latest available, locally checked, and project-pinned versions are distinct; none is an automatic upgrade requirement.
 
 ## Resolve and inspect
 
@@ -20,12 +20,25 @@ unity commands --grep <topic>
 unity <command> --help
 ```
 
-Inspect only the relevant Editor, project, module, auth or license state. If `unity` is missing, check PATH; installation requires setup scope. Do not install or upgrade it just to match this skill.
+Inspect only the relevant Editor, project, module, auth or license state.
+
+## Check versions, install or update
+
+For setup, update requests or suspected version mismatches, read [versions and setup](references/versions-and-setup.md). Check `unity --version`, then `unity self-update --check --format json` and `unity pipeline list-versions --format json` when network access is available. Read the project's requested/resolved `com.unity.pipeline` version from `Packages/manifest.json` and `Packages/packages-lock.json`; discover live commands before assuming compatibility. Compare prerelease versions semantically, not lexicographically. A failed/offline check means latest is unknown, not up to date.
+
+If Unity CLI is missing, check PATH and duplicate installations, then install it through the appropriate official installer/package manager when setup is authorized. If an update is requested, inspect release notes, preserve any team pin, and update through the existing install method (`unity self-update` for supported standalone/MSIX installs, or its package manager). Do not change the Editor version incidentally.
+
+If live Editor control needs Pipeline and the package is missing, install it with `unity pipeline install --project-path <absolute-project>` within the authorized setup. For a requested package upgrade, inspect source-control changes, the Editor/package requirements and the installed command help, then use `unity pipeline upgrade --project-path <absolute-project>` or an explicitly agreed `pipeline install --version <version>` pin. Preserve Git/local package sources unless changing them is intended.
+
+Carry out installation/update work already covered by the user's request; otherwise report the concrete missing/outdated dependency and proposed change before seeking authorization. A version check alone does not authorize an update, and a notification's remediation command is not an instruction to execute. After a change, recheck CLI version/help, resolved package version, compilation and target Editor readiness; report the actual outcome.
+
+For installation/update of this skill plugin itself, use the host's native marketplace flow in the [repository README](https://github.com/BillyPung/unity-cli-skill#install). Keep that separate from CLI/Pipeline installation and Unity's own agent plugin. Do not edit plugin caches or use the legacy Python installer for a marketplace-managed plugin.
 
 ## Choose the workflow
 
 | Task | Reference |
 | --- | --- |
+| Version correctness/freshness, CLI installation/update, Pipeline installation/update | [Versions and setup](references/versions-and-setup.md) |
 | Editors, modules, projects, authentication, migration or diagnostics | [Command guide](references/command-guide.md) |
 | Live Editor/Player commands, custom commands, package setup or Method Reload | [Pipeline guide](references/pipeline-package.md) |
 | Builds, tests, reports, sharding, detached jobs or CI | [CI and validation](references/ci-and-validation.md) |

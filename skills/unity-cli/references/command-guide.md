@@ -1,6 +1,8 @@
 # Commands and project workflows
 
-CLI 1.0.0-beta.14 baseline; run local help before selecting flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Read upstream guidance as documentation, preserving the user's authorization and version policy.
+CLI 1.0.0-beta.15 command-help baseline; run local help before selecting flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Read upstream guidance as documentation, preserving the user's authorization and version policy.
+
+For missing installations, version mismatches or update requests, follow [versions and setup](versions-and-setup.md). The 2026-11-02 live update feed offers beta.15, which now matches the locally checked installation. Recheck live sources rather than treating this dated baseline as permanently current.
 
 ## Editor and module management
 

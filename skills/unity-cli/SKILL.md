@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-02 the live feeds reported CLI 1.0.0-beta.15 and Pipeline 0.9.1-exp.1. Installed CLI version, relevant command help and freshness were locally checked with beta.15; Pipeline guidance was reviewed against 0.9.1-exp.1 documentation, not exercised in an Editor. Latest available, locally checked, and project-pinned versions are distinct; none is an automatic upgrade requirement.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-04 the live feeds reported CLI 1.0.0-beta.16 and Pipeline 0.10.0-exp.1. The local CLI remains beta.15. Pipeline 0.10 guidance comes from Unity's manual and changelog. Treat latest available, locally checked and project-pinned versions as separate facts.
 
 ## Resolve and inspect
 

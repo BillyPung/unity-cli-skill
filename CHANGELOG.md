@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0 — 2026-11-04
+
+- Confirm Pipeline 0.10.0-exp.1 in Unity's registry and review its versioned documentation.
+- Update agent guidance for capture paths and overlays, `component get_fields`, protocol exit codes and per-user Editor settings.
+- Record experimental desktop Player support and point agents to Profiler and memory capture commands.
+- Record CLI beta.16 as available and retain beta.15 as the local command-help baseline.
+
 ## 1.2.0 — 2026-11-02
 
 - Check live Unity feeds: CLI beta.15 is available; Pipeline remains 0.9.1-exp.1.

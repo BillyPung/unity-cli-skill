@@ -92,12 +92,12 @@ Start a new chat/session if your client still shows the old version. These steps
 
 ## Supported versions
 
-Last checked **2026-11-02**. This is the repository's documented compatibility baseline, not a tested matrix of every Editor/platform combination.
+Last checked **2026-11-04**. The baseline records the local CLI help checks and the Pipeline documentation review.
 
 | Component | Documented / checked baseline | Latest available when checked | Status |
 | --- | --- | --- | --- |
-| Unity CLI | **`1.0.0-beta.15`** — installed version, relevant command help and live update check verified locally | **`1.0.0-beta.15`** — live update feed and target release notes | Local CLI is current. Updating from the previous beta.14 baseline is available. Project build/test behavior is not a compatibility certification. |
-| Unity Pipeline (`com.unity.pipeline`) | `0.9.1-exp.1` — documentation reviewed | **`0.9.1-exp.1`** — live Unity package registry | No newer registry release found. Live Editor behavior was not tested in this review. |
+| Unity CLI | **`1.0.0-beta.15`** — locally installed and checked against command help | **`1.0.0-beta.16`** — live update feed and target release notes | An update is available from beta.15. Beta.16 coverage is based on its release notes. |
+| Unity Pipeline (`com.unity.pipeline`) | **`0.10.0-exp.1`** — versioned manual and changelog reviewed | **`0.10.0-exp.1`** — live Unity package registry | Experimental release with changes to capture, command formatting and Editor settings. Runtime coverage is documentation-only. |
 | Unity Editor | **Unity 6+** is the Pipeline prerequisite | Use the project's pinned version | Check the chosen package's requirements; do not upgrade the Editor just to match this skill. |
 
 The marketplace plugin's own version is separate from the CLI, Pipeline and Editor versions. Newer releases may work, but the agent must discover their commands rather than assume the baseline still applies. Older versions may lack documented features.
@@ -109,14 +109,14 @@ Ask: **“Use the Unity CLI skill to check the installed CLI and this project's 
 The agent should:
 
 1. Run `unity --version` and inspect the relevant command help.
-2. Run `unity self-update --check --format json` to compare installed and latest CLI versions, and `unity changelog --target <version>` to inspect the target release. The public release-notes page still showed beta.14 when the live feed already offered beta.15.
+2. Run `unity self-update --check --format json` to compare installed and latest CLI versions, and `unity changelog --target <version>` to inspect the target release. Use the live feed if the public release-notes page lags it.
 3. Run `unity pipeline list-versions --format json`, then inspect `Packages/manifest.json` and `Packages/packages-lock.json` in the intended project to distinguish requested source from resolved version.
 4. Preserve deliberate pins, compare prerelease versions semantically, check the Editor/package requirements and discover the running package's schema. A successful freshness check is not proof of project compatibility.
 5. Report installed/resolved/latest versions separately. If a feed cannot be reached, report freshness as unknown. Do not call an offline installation up to date.
 
 The skill includes concrete [CLI and Pipeline installation/update steps](skills/unity-cli/references/versions-and-setup.md). When setup or updating is requested, the agent should perform the authorized work and verify it. A check-only request should produce findings and a proposed change, without modifying installations or project packages.
 
-Sources: [official CLI install/update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli), [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes), [Pipeline documentation](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html), plus the live update/registry commands above.
+See Unity's [CLI install and update guide](https://docs.unity.com/en-us/unity-cli/use-unity-cli), [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) and [Pipeline 0.10 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/changelog/CHANGELOG.html).
 
 ## Try it
 
@@ -149,6 +149,6 @@ For maintenance, keep versions synchronized across manifests, catalogs, `VERSION
 
 ## References
 
-[Unity CLI](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) · [Pipeline](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html) · [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) · [OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins) · [OMP marketplaces](https://github.com/can1357/oh-my-pi/blob/main/docs/marketplace.md)
+[Unity CLI](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) · [Pipeline 0.10](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/index.html) · [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) · [OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins) · [OMP marketplaces](https://github.com/can1357/oh-my-pi/blob/main/docs/marketplace.md)
 
 MIT licensed. Unity binaries and third-party documentation are not bundled.

@@ -1,8 +1,8 @@
 # Unity Pipeline
 
-Baseline: com.unity.pipeline 0.9.1-exp.1 documentation. Live commands require Unity 6+ and a compiled package. Preserve an existing package version unless an update is requested or necessary and authorized.
+Documentation baseline is `com.unity.pipeline` 0.10.0-exp.1. Live commands require Unity 6+ and a compiled package. Preserve existing project pins when choosing versions.
 
-The live registry still reported 0.9.1-exp.1 as latest on 2026-11-02. Use [versions and setup](versions-and-setup.md) to recheck the registry, inspect the project's resolved dependency, and install or upgrade within scope; this dated baseline is not a permanent latest-version assertion.
+The live registry reported 0.10.0-exp.1 as latest on 2026-11-04. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
 
 ## Installation and discovery
 
@@ -20,7 +20,7 @@ Install before first open when setup is requested. If installing into an open Ed
 
 ## Grouped commands and selection
 
-Pipeline 0.9 uses `unity command <group> <name>`. Discover groups and schema rather than retaining a hard-coded catalog. Examples:
+Pipeline 0.9 and 0.10 use `unity command <group> <name>`. Discover the groups and schema for the installed package.
 
 ```sh
 unity command --project-path <absolute-project> editor status
@@ -34,6 +34,15 @@ The last command maps obsolete names when the connected package supports it. Fla
 CLI beta.14 supports `--port`, `--pid`, and `--instance` for explicit Editor selection. For worktrees always target the owning project. New listings use `--group-by`; the old `--group_by` spelling is deprecated. Listing filters, detail and paging reduce large responses.
 
 Put Pipeline arguments after `--` to prevent collisions with CLI flags. CLI timeout is seconds; `script eval`'s code timeout is milliseconds. Inspect the live schema for other timeout contracts.
+
+## Pipeline 0.10 migration
+
+- For `component get_fields`, 0.10 uses `detail=value` where older versions used `format=value`. When authoring commands for 0.10, leave `format`, `json`, `fields`, `verbose` and `omit-nulls` to the executor.
+- Check the Editor's `transport.pipelineProtocol` capability and the client's support before using package-formatted streaming. Pipeline protocol server errors start at exit code 100 in 0.10. Apply that rule to protocol responses and consult the installed CLI's exit-code contract for the outer command.
+- Editor server settings migrate from `ProjectSettings/` to per-user `UserSettings/`. Check each Editor's configuration when reproducing settings across a team. `editor status` now reports domain reload count and Auto Refresh. On Unity 6.3+ the toolbar can start and stop the server.
+- Discover Profiler capture and memory snapshot commands for the target Editor or desktop Player. The [play-mode guide](playmode-verification.md) covers capture changes that affect existing scripts.
+
+[Pipeline 0.10 release notes](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/changelog/CHANGELOG.html) · [Connectivity and capabilities](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/connectivity.html)
 
 ## Mutation and batch handling
 
@@ -55,11 +64,11 @@ Attributes live in `Unity.Pipeline.Attributes`; richer APIs such as `CommandRegi
 
 Current setup uses Project Settings > Pipeline > Runtime and automatic `RuntimePipelineBootstrap`; no manager component is required in a startup scene. Development/profiled and release inclusion are separate toggles. Do not enable release inclusion incidentally: it adds the command server and code-execution surface. Do not carry forward the old assertion that release builds always exclude Pipeline.
 
-Target Players with `--runtime <process-name>` or `--runtime-path <descriptor-folder-or-bundle>` before the command group, e.g. `unity command --runtime MyGame.exe runtime status`. Do not assume universal platform support: build target, backend, network reachability, stripping and individual command support must all be checked.
+Pipeline 0.10 documents experimental Runtime Pipeline support for desktop Players on Windows, macOS and Linux. Target a Player with `--runtime <process-name>` or `--runtime-path <descriptor-folder-or-bundle>` before the command group. For example, run `unity command --runtime MyGame.exe runtime status`. Check the Player's scripting backend, reachability, stripping and command availability. [Runtime setup](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/runtime-setup.html)
 
 Method Reload uses `[MethodReload]` and `script.methodreload` commands. Editor compilation/push and IL-interpreter routes support workflows beyond the old Mono-only pattern; direct Roslyn compilation has platform constraints. For IL2CPP check preserved members and generated link.xml requirements. Verify reload status, then validate persistent source with a normal compilation/build; a reload is not that validation.
 
-[Runtime setup](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/runtime-setup.html), [Method Reload](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/method-reload.html), [package changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/changelog/CHANGELOG.html)
+[Method Reload](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/method-reload.html)
 
 ## Connectivity and multiplayer
 
@@ -67,4 +76,4 @@ Prefer CLI discovery over parsing descriptors or hard-coded ports. Direct client
 
 Multiplayer Play Mode scenario commands require Unity 6000.3+ and the matching package. Discover scenarios, start through the scenario manager, poll each player's reachability and target its returned project path/instance. Do not use ordinary play entry for an orchestrated scenario.
 
-[Connectivity](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/connectivity.html), [MPPM](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/commands/multiplayer-play-mode.html), [command index](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/index.html)
+[Connectivity](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/connectivity.html) · [MPPM](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/commands/multiplayer-play-mode.html) · [Package manual](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/index.html)

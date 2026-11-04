@@ -1,6 +1,6 @@
 # Verify a running game
 
-Discover the connected schema first. These names follow Pipeline 0.9; older packages differ. Pin the project on every invocation.
+Discover the connected schema first. The grouped names below apply to Pipeline 0.9 and 0.10. Pin the project on every invocation.
 
 1. Record whether the Editor was already playing or paused. Preserve a user-owned session; do not stop or change its pacing as incidental validation.
 2. For a session you start, inspect background settings. `editor set_auto_tick` and `editor.playmode set_run_in_background` can keep an unfocused game advancing. Restore temporary changes after verification.
@@ -11,5 +11,11 @@ Discover the connected schema first. These names follow Pipeline 0.9; older pack
 7. Stop only the session you started, and restore temporary settings.
 
 Use `--` before Pipeline flags to distinguish them from CLI flags. Long condition waits should use the package's async wait and wait-status/cancel commands rather than blocking work needed to satisfy the condition. This is separate from CLI detached jobs.
+
+With Pipeline 0.10, use `capture game_view` or `capture scene_view` with `save_path` in place of the deprecated `capture screenshot`. Relative paths now resolve from the project root. Absolute paths are accepted and `savedPath` is absolute. Recheck destinations when migrating a script that expected paths relative to `Assets/`.
+
+For the Scene view, `source=camera` renders its camera and `source=screen` captures the window as drawn. Use `capture editor_window` when the task calls for a specific open Editor window.
+
+`capture game_view` can open a Game view on demand, including in batch mode. If a newly opened view lacks a frame, wait for rendering and retry an explicit `source=screen` request. When `source` is omitted, inspect the response message for camera fallback. In URP and HDRP, the camera capture's `overlay` setting can include Screen Space - Overlay UI. Check the installed schema and the returned image. [Pipeline 0.10 capture guide](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/commands/capture.html)
 
 [Editor observability](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/commands/editor-lifecycle-and-observability.html), [waits](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/commands/wait.html), [capture](https://docs.unity3d.com/Packages/com.unity.pipeline@0.9/manual/commands/capture.html). For a binary-matched recipe read `unity skill show --path references/playmode-verification-loop.md`.

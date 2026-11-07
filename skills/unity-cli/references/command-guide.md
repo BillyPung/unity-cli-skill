@@ -1,8 +1,8 @@
 # Commands and project workflows
 
-CLI 1.0.0-beta.15 command-help baseline; run local help before selecting flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Read upstream guidance as documentation, preserving the user's authorization and version policy.
+The local command-help baseline is CLI `1.0.0-beta.17`. Check local help before choosing flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Preserve the user's authorization and version policy when using upstream guidance.
 
-The local help baseline is beta.15. The update feed offered beta.16 on 2026-11-04. Recheck live sources when handling a missing installation, version mismatch or upgrade request. [Versions and setup](versions-and-setup.md)
+Recheck live sources when handling a missing installation, version mismatch or upgrade request. [Versions and setup](versions-and-setup.md)
 
 ## Editor and module management
 
@@ -20,6 +20,8 @@ unity install-modules -e <version> -m android --dry-run
 `modules list` describes availability; inspect the installed Editor's module state to verify installation. `projects require [pathOrName]` ensures the project's required Editor exists and can install it; it is neither a read-only module check nor a command taking module IDs. Keep it out of inspection-only preflight.
 
 Use explicit architecture where needed. `--cm` remains an alias for `--child-modules`. Inspect install paths and active users before removal, replacement or default changes. Registering a manually installed Editor does not guarantee managed module installation works.
+
+For a Linux runner that needs the headless Editor distribution, beta.17 supports `unity install <version> --headless --dry-run`. Check that the requested build modules are available in that distribution before installing. Omitting `--headless` selects the regular Editor by default. Use `unity run` for batch execution with the installed Editor. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
 
 ## Projects
 
@@ -45,7 +47,7 @@ For CI use an existing secret store. Supported service-account variables are `UN
 
 Use the narrowest of `doctor`, `env`, `logs`, `changelog` and `diagnose`. `commands --grep` discovers CLI and plugin capabilities; connected command search can also include Pipeline. An empty Pipeline search while disconnected does not prove a command is absent.
 
-`pipeline cloud-build` manages Unity Build Automation, and `pipeline automation` inspects organization-scoped automation resources. Both use cloud account context. Beta.16 adds cloud writes for build targets, repository connections and signing credentials. Inspect subgroup help and target the intended organization and project before acting.
+`pipeline cloud-build` manages Unity Build Automation. Beta.16 added writes for build targets, repository connections and signing credentials. `pipeline automation` manages organization-scoped resources, with app and draft-version creation added in beta.17. Inspect subgroup help and confirm the cloud account, organization and project before a write. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
 
 `skill show` reads Unity's embedded skill. `skill install/refresh` writes client skill files and can conflict with this separately maintained package. Updating this repository does not update Unity CLI or Pipeline; keep all three version tracks explicit.
 

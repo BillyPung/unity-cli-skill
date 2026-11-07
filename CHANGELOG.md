@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0 — 2026-11-07
+
+- Verify CLI beta.17 locally and confirm Pipeline 0.10.0-exp.1 in the live registry.
+- Document headless Linux Editor installation, Pipeline TSV changes and the quoted project path discovery fix.
+- Update guidance for Pipeline Automation writes and separate test report destinations.
+
 ## 1.3.0 — 2026-11-04
 
 - Confirm Pipeline 0.10.0-exp.1 in Unity's registry and review its versioned documentation.

@@ -1,10 +1,10 @@
 # Versions, installation and updates
 
-## Checked state on 2026-11-04
+## Checked state on 2026-11-07
 
 | Component | Latest found | Evidence and limits |
 | --- | --- | --- |
-| Unity CLI | `1.0.0-beta.16` | Local CLI is beta.15. Live `self-update --check` and `changelog --target` verified beta.16 availability and notes. |
+| Unity CLI | `1.0.0-beta.17` | Local version and selected command help match beta.17. The live update check and target release notes confirm the release. |
 | `com.unity.pipeline` | `0.10.0-exp.1` | Live registry and versioned 0.10 documentation agree. The review covers documentation and command guidance. |
 | Unity Editor | Unity 6+ for Pipeline | Prerequisite, not a tested Editor matrix. Keep the version in `ProjectSettings/ProjectVersion.txt`; check the selected package's own requirements. |
 
@@ -15,10 +15,10 @@ This snapshot is not a permanent latest-version claim or a promise that all comb
 1. Resolve the executable with `Get-Command unity` (PowerShell) or `command -v unity` (POSIX). If missing after installation, reopen the terminal/check PATH before installing again. Check for competing install methods.
 2. Run `unity --version` and the needed command's `--help`. Check the live feed with `unity self-update --check --format json`. Inspect `data.currentVersion`, `data.latestVersion`, envelope success and exit status; fields can change in other releases.
 3. Run `unity pipeline list-versions --format json`. Read the registry's latest and available versions. In the project, inspect `Packages/manifest.json` for the requested source/version and `Packages/packages-lock.json` for the resolved entry. A range, Git URL or local path is not a resolved registry release. If necessary inspect that package's own `package.json`; do not infer it from the port descriptor.
-4. Compare versions with SemVer. For example, `0.10.0-exp.1` follows `0.9.1-exp.1`, and `beta.16` follows `beta.15`. Preserve deliberate team pins and check the features needed by the task.
+4. Compare versions with SemVer. For example, `0.10.0-exp.1` follows `0.9.1-exp.1`, and `beta.17` follows `beta.16`. Preserve deliberate team pins and check the features needed by the task.
 5. Discover the running package's command schema and confirm the exact target with `unity status --project-path <absolute-project> --format json`. A current package can still be unavailable because it has not compiled/loaded.
 
-Report installed, requested/resolved and latest available versions separately, with the check date. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` if the public release-notes page lags. For Pipeline changes open the matching versioned manual and changelog. On 2026-11-04 the Pipeline `@latest` documentation redirect still pointed to 0.9 while the registry and 0.10 changelog showed 0.10.0-exp.1.
+Report installed, requested/resolved and latest available versions separately, with the check date. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` if the public release-notes page lags. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-07 the `@latest` documentation redirect pointed to the 0.10 manual.
 
 ## Install Unity CLI
 
@@ -51,7 +51,7 @@ The last mutating step requires update scope. Use unpinned `unity self-update` o
 
 ## Install or update Pipeline in the intended project
 
-Require a compatible Editor and a recoverable source-control state. Read `pipeline install --help` and `pipeline upgrade --help`. Beta.14 and beta.15 use `--version`; older binaries used `--package-version`. Do not overwrite an existing Git/local dependency merely to match the registry snapshot.
+Require a compatible Editor and a recoverable source-control state. Read `pipeline install --help` and `pipeline upgrade --help`. The local beta.17 uses `--version`. Some older binaries used `--package-version`. Preserve existing Git and local dependencies unless the requested change includes replacing their source.
 
 ```sh
 unity pipeline list-versions --format json

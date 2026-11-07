@@ -2,11 +2,11 @@
 
 Documentation baseline is `com.unity.pipeline` 0.10.0-exp.1. Live commands require Unity 6+ and a compiled package. Preserve existing project pins when choosing versions.
 
-The live registry reported 0.10.0-exp.1 as latest on 2026-11-04. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
+The live registry confirmed 0.10.0-exp.1 as latest on 2026-11-07. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
 
 ## Installation and discovery
 
-Inspect `pipeline install --help` first. CLI beta.14/beta.15 use `--version` for a package pin; older binaries used `--package-version`.
+Inspect `pipeline install --help` first. The local beta.17 accepts `--version` for a package pin. Some older binaries used `--package-version`.
 
 ```sh
 unity pipeline install --project-path <absolute-project>
@@ -17,6 +17,8 @@ unity command --project-path <absolute-project> --detail full --format json
 ```
 
 Install before first open when setup is requested. If installing into an open Editor, wait for resolution/compilation and refresh. Safe Mode can prevent Pipeline loading at all; `recompile` cannot diagnose through a server that never started. Inspect Editor logs and fix startup compile errors. A sandbox can also hide an existing Editor: absence from status alone is not proof it is stopped.
+
+For scripted installs and upgrades, prefer `--format json` and inspect the resolved package version. Beta.17 emits TSV fields as key/value rows with a header. Check any parser that expects the earlier positional row. Beta.17 also fixes Editor discovery for launches with a quoted `-projectPath` argument. Check the CLI version if an older binary misses an Editor launched that way. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
 
 ## Grouped commands and selection
 

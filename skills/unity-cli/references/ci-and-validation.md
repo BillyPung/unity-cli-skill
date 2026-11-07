@@ -17,6 +17,8 @@ unity test <absolute-project> --mode EditMode --report-format nunit,junit --outp
 
 Exit 8 means tests completed with failures; 6 means the run failed without a completed verdict. Read the report and structured codes, distinguishing TESTS_FAILED, TEST_RUN_ERROR and TEST_TIMED_OUT. Diagnose compile/license/crash failures before considering a bounded retry; do not retry assertions as infrastructure failures.
 
+When setting both `--output` and `--junit-output`, give them distinct destination files. Beta.17 rejects a JUnit path that resolves to the same file as the NUnit report. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
+
 `--shard N/M` requires an appropriate full-suite inventory via `--shard-inventory`. Do not run simultaneous Editors on the same project directory; use isolated CI checkouts. `--retries` reports flakes; keep failures visible. `--rerun-failed` consumes the prior report. `--affected` uses impact information and can fall back to all tests; use `--affected-compare` when assessing selection coverage. Coverage requires the project's Code Coverage package. `watch test` is a development loop, not an unattended CI step.
 
 ## Build and batch
@@ -31,4 +33,4 @@ Detached `command --detach` returns a job ID. Track that same job with `unity jo
 
 `ci init --dry-run` previews GitHub/GitLab workflow generation. Review writes before using `--overwrite`. Project defaults can live in `ProjectSettings/UnityCliConfig.json`; `config resolve <key> <project>` reports the winning layer. Explicit task flags should make critical values visible. Accelerator settings optimize imports but do not change correctness requirements. Keep signing/license/auth secrets in the CI secret store.
 
-Source: installed CLI beta.15 command help, rechecked 2026-11-02; [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference). For deeper binary-matched details use `unity skill show --path references/build-run-test.md`.
+The `test`, `build` and `run` flags were checked locally with beta.17 on 2026-11-07. For binary-matched details use `unity skill show --path references/build-run-test.md`. [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference)

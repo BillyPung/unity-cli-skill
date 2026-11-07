@@ -92,11 +92,11 @@ Start a new chat/session if your client still shows the old version. These steps
 
 ## Supported versions
 
-Last checked **2026-11-04**. The baseline records the local CLI help checks and the Pipeline documentation review.
+Last checked **2026-11-07**. The baseline records the local CLI help checks and the Pipeline documentation review.
 
 | Component | Documented / checked baseline | Latest available when checked | Status |
 | --- | --- | --- | --- |
-| Unity CLI | **`1.0.0-beta.15`** — locally installed and checked against command help | **`1.0.0-beta.16`** — live update feed and target release notes | An update is available from beta.15. Beta.16 coverage is based on its release notes. |
+| Unity CLI | **`1.0.0-beta.17`**, verified locally with command help | **`1.0.0-beta.17`**, confirmed by the live update feed | Current on the checked machine. See the command guide for headless Linux installation and Pipeline changes. |
 | Unity Pipeline (`com.unity.pipeline`) | **`0.10.0-exp.1`** — versioned manual and changelog reviewed | **`0.10.0-exp.1`** — live Unity package registry | Experimental release with changes to capture, command formatting and Editor settings. Runtime coverage is documentation-only. |
 | Unity Editor | **Unity 6+** is the Pipeline prerequisite | Use the project's pinned version | Check the chosen package's requirements; do not upgrade the Editor just to match this skill. |
 

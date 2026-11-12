@@ -1,11 +1,11 @@
 # Versions, installation and updates
 
-## Checked state on 2026-11-07
+## Checked state on 2026-11-12
 
 | Component | Latest found | Evidence and limits |
 | --- | --- | --- |
 | Unity CLI | `1.0.0-beta.17` | Local version and selected command help match beta.17. The live update check and target release notes confirm the release. |
-| `com.unity.pipeline` | `0.10.0-exp.1` | Live registry and versioned 0.10 documentation agree. The review covers documentation and command guidance. |
+| `com.unity.pipeline` | `1.0.0` | Live registry and versioned 1.0 documentation agree. First stable package release on November 11; review covers documentation and command guidance, with live Editor/Player validation pending. Runtime remains experimental for desktop Players. |
 | Unity Editor | Unity 6+ for Pipeline | Prerequisite, not a tested Editor matrix. Keep the version in `ProjectSettings/ProjectVersion.txt`; check the selected package's own requirements. |
 
 This snapshot is not a permanent latest-version claim or a promise that all combinations work. The skill/plugin version in `VERSION` is a separate release track.
@@ -15,10 +15,10 @@ This snapshot is not a permanent latest-version claim or a promise that all comb
 1. Resolve the executable with `Get-Command unity` (PowerShell) or `command -v unity` (POSIX). If missing after installation, reopen the terminal/check PATH before installing again. Check for competing install methods.
 2. Run `unity --version` and the needed command's `--help`. Check the live feed with `unity self-update --check --format json`. Inspect `data.currentVersion`, `data.latestVersion`, envelope success and exit status; fields can change in other releases.
 3. Run `unity pipeline list-versions --format json`. Read the registry's latest and available versions. In the project, inspect `Packages/manifest.json` for the requested source/version and `Packages/packages-lock.json` for the resolved entry. A range, Git URL or local path is not a resolved registry release. If necessary inspect that package's own `package.json`; do not infer it from the port descriptor.
-4. Compare versions with SemVer. For example, `0.10.0-exp.1` follows `0.9.1-exp.1`, and `beta.17` follows `beta.16`. Preserve deliberate team pins and check the features needed by the task.
+4. Compare versions with SemVer. For example, `1.0.0` follows `1.0.0-pre.1` and `0.10.0-exp.1`, and `beta.17` follows `beta.16`. Preserve deliberate team pins and check the features needed by the task. A stable package label does not make every workflow stable: Runtime Pipeline remains experimental in 1.0.
 5. Discover the running package's command schema and confirm the exact target with `unity status --project-path <absolute-project> --format json`. A current package can still be unavailable because it has not compiled/loaded.
 
-Report installed, requested/resolved and latest available versions separately, with the check date. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` if the public release-notes page lags. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-07 the `@latest` documentation redirect pointed to the 0.10 manual.
+Report installed, requested/resolved and latest available versions separately, with the check date. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` if the public release-notes page lags. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-12 the `@latest` documentation redirect pointed to the 1.0 manual.
 
 ## Install Unity CLI
 
@@ -53,6 +53,8 @@ The last mutating step requires update scope. Use unpinned `unity self-update` o
 
 Require a compatible Editor and a recoverable source-control state. Read `pipeline install --help` and `pipeline upgrade --help`. The local beta.17 uses `--version`. Some older binaries used `--package-version`. Preserve existing Git and local dependencies unless the requested change includes replacing their source.
 
+Before a 0.x → 1.0 upgrade, review the [migration changes](pipeline-package.md#pipeline-10-migration): removed aliases/parameter spellings, direct eval values, and changed Pipeline test results/exit codes. Update dependent scripts as part of the authorized migration. An older CLI that sends removed keys can fail with `INVALID_COMMAND_ARGS`; check its version and help rather than silently downgrading the project.
+
 ```sh
 unity pipeline list-versions --format json
 unity pipeline install --project-path <absolute-project> --version <agreed-package-version>
@@ -68,4 +70,4 @@ To deliberately select a specific available version, use the explicit install pi
 
 Allow UPM resolution, refresh and compilation to finish. Re-read the manifest/lock, inspect their diff, then verify `pipeline list`, target `status --until-ready` with a bounded timeout, and live command discovery. Import/compile failures are not success. If no Editor can be started within scope, report that files were updated but live validation is pending. See [Pipeline recovery and runtime guidance](pipeline-package.md).
 
-[Official CLI install and update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli) · [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) · [Pipeline 0.10 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/changelog/CHANGELOG.html)
+[Official CLI install and update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli) · [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) · [Pipeline 1.0 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/changelog/CHANGELOG.html)

@@ -92,15 +92,17 @@ Start a new chat/session if your client still shows the old version. These steps
 
 ## Supported versions
 
-Last checked **2026-11-07**. The baseline records the local CLI help checks and the Pipeline documentation review.
+Last checked **2026-11-12**. The baseline records the local CLI help checks and the Pipeline documentation review.
 
 | Component | Documented / checked baseline | Latest available when checked | Status |
 | --- | --- | --- | --- |
 | Unity CLI | **`1.0.0-beta.17`**, verified locally with command help | **`1.0.0-beta.17`**, confirmed by the live update feed | Current on the checked machine. See the command guide for headless Linux installation and Pipeline changes. |
-| Unity Pipeline (`com.unity.pipeline`) | **`0.10.0-exp.1`** — versioned manual and changelog reviewed | **`0.10.0-exp.1`** — live Unity package registry | Experimental release with changes to capture, command formatting and Editor settings. Runtime coverage is documentation-only. |
+| Unity Pipeline (`com.unity.pipeline`) | **`1.0.0`** — versioned manual and changelog reviewed | **`1.0.0`** — live Unity package registry | First stable package release, published November 11. Includes breaking eval, command and parameter changes. Live Editor/Player validation is pending; the Runtime workflow remains experimental for desktop Players. |
 | Unity Editor | **Unity 6+** is the Pipeline prerequisite | Use the project's pinned version | Check the chosen package's requirements; do not upgrade the Editor just to match this skill. |
 
 The marketplace plugin's own version is separate from the CLI, Pipeline and Editor versions. Newer releases may work, but the agent must discover their commands rather than assume the baseline still applies. Older versions may lack documented features.
+
+Upgrading Pipeline from 0.10? Review the [1.0 migration guide](skills/unity-cli/references/pipeline-package.md#pipeline-10-migration). Update parsers for direct eval values, use current grouped commands and kebab-case parameters, and distinguish Pipeline test exit codes from top-level CLI test codes.
 
 ### How the AI checks correctness and freshness
 
@@ -116,7 +118,7 @@ The agent should:
 
 The skill includes concrete [CLI and Pipeline installation/update steps](skills/unity-cli/references/versions-and-setup.md). When setup or updating is requested, the agent should perform the authorized work and verify it. A check-only request should produce findings and a proposed change, without modifying installations or project packages.
 
-See Unity's [CLI install and update guide](https://docs.unity.com/en-us/unity-cli/use-unity-cli), [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) and [Pipeline 0.10 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/changelog/CHANGELOG.html).
+See Unity's [CLI install and update guide](https://docs.unity.com/en-us/unity-cli/use-unity-cli), [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) and [Pipeline 1.0 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/changelog/CHANGELOG.html).
 
 ## Try it
 
@@ -149,6 +151,6 @@ For maintenance, keep versions synchronized across manifests, catalogs, `VERSION
 
 ## References
 
-[Unity CLI](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) · [Pipeline 0.10](https://docs.unity3d.com/Packages/com.unity.pipeline@0.10/manual/index.html) · [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) · [OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins) · [OMP marketplaces](https://github.com/can1357/oh-my-pi/blob/main/docs/marketplace.md)
+[Unity CLI](https://docs.unity.com/en-us/unity-cli/unity-cli-reference) · [Pipeline 1.0](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/manual/index.html) · [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) · [OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins) · [OMP marketplaces](https://github.com/can1357/oh-my-pi/blob/main/docs/marketplace.md)
 
 MIT licensed. Unity binaries and third-party documentation are not bundled.

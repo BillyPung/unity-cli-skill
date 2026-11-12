@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — 2026-11-12
+
+- Confirm Pipeline 1.0.0 in the live registry and review its first stable release; Unity CLI remains beta.17 locally and in the update feed.
+- Update README compatibility and AI version checks, preserving explicit installation/update workflows and project pins.
+- Document direct eval values, removed aliases, kebab-case arguments, eval timeout units and the CommandContext authoring API.
+- Distinguish live Pipeline test modes, result fields and exit codes from top-level CLI tests; correct capture output paths and Play-mode background handling.
+- Add Profiler capture analysis and Scene Preview guidance, plus updated Build Profile and Method Reload constraints. Runtime Pipeline remains experimental for desktop Players; live Editor/Player validation is pending.
+
 ## 1.4.0 — 2026-11-07
 
 - Verify CLI beta.17 locally and confirm Pipeline 0.10.0-exp.1 in the live registry.

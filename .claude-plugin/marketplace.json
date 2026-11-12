@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Unity workflows for your coding agent.",
-    "version": "1.4.0"
+    "version": "1.5.0"
   },
   "plugins": [
     {
       "name": "unity-cli",
       "source": "./",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "Bring your coding agent into Unity: inspect projects, drive the Editor, and build and test with current CLI guidance.",
       "homepage": "https://github.com/BillyPung/unity-cli-skill",
       "category": "development",

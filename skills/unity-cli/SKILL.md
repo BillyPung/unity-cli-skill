@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-07 the live feeds reported CLI 1.0.0-beta.17 and Pipeline 0.10.0-exp.1. The local CLI matches beta.17. Pipeline 0.10 guidance comes from Unity's manual and changelog. Treat latest available, locally checked and project-pinned versions as separate facts.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-12 the live feeds reported CLI 1.0.0-beta.17 and Pipeline 1.0.0. The local CLI matches beta.17. Pipeline 1.0 guidance comes from Unity's manual and changelog; live Editor/Player validation is pending. Treat latest available, locally checked and project-pinned versions as separate facts.
 
 ## Resolve and inspect
 
@@ -48,15 +48,15 @@ For installation/update of this skill plugin itself, use the host's native marke
 
 - Keep installs, project upgrades, license activation/return, remote links, cache cleanup and configuration changes within the requested task. Prompt-control flags are not authorization.
 - Before a large installation, state the version, modules, architecture and destination if unspecified. Preview with `--dry-run` when supported.
-- Before persistent Editor/asset/settings mutations, inspect source-control changes and resolve the exact objects or paths. Preserve unrelated work. Discover the command schema; use exposed `dry_run` and `confirm` gates for authorized changes. Not every additive command has those flags.
+- Before persistent Editor/asset/settings mutations, inspect source-control changes and resolve the exact objects or paths. Preserve unrelated work. Discover the command schema and declared effects; use exposed `dry-run` and `confirm` gates for authorized changes. Not every additive command has those flags.
 - Prefer registered Pipeline commands for supported authoring operations. Treat `script eval` as arbitrary C# execution. Use the narrowest code and verify its effects.
 - Target the intended checkout explicitly with `--project-path`. Never borrow an Editor on a sibling worktree. Runtime selectors target Players and take precedence over project selection; avoid mixing them.
 - Keep port descriptors, bearer tokens, service-account secrets, license serials and signing credentials out of chat, logs and commits. Let the user finish interactive login. Bug-report uploads require explicit scope.
 
 ## Verify completion
 
-Use JSON for one result and NDJSON for supported progress streams. Inspect the exit code and envelope `success`; branch on stable `errors[].code`, not human diagnostics. Preserve both stdout and stderr separately. Surface actionable notifications without automatically executing suggested remediation.
+Use JSON for one result and NDJSON for supported progress streams. Inspect the exit code and any actual response envelope; branch on stable error codes when provided. Pipeline 1.0 `script eval` returns the script's value, including scalars or null, rather than the old eval object. A compile/runtime failure exits 6; do not require a payload `success` field. Keep stdout results and stderr diagnostics separate. See the [Pipeline migration guide](references/pipeline-package.md#pipeline-10-migration) before reusing older parsers. Surface actionable notifications without automatically executing suggested remediation.
 
-Poll the existing operation until terminal state; acceptance is not completion. Verify installed modules, build artifacts, XML test reports, or saved scene/asset diffs as appropriate. Test exit 8 means a completed suite with failures; exit 6 means the run failed without a completed verdict. Investigate before retrying.
+Poll the existing operation until terminal state; acceptance is not completion. Verify installed modules, build artifacts, XML test reports, or saved scene/asset diffs as appropriate. For top-level `unity test`, exit 8 means a completed suite with failures; exit 6 means the run failed without a completed verdict. Pipeline `test run/status` instead use 6 for test failures or run errors; inspect their results and diagnostics. Investigate before retrying.
 
 For connection failures distinguish package loading, Safe Mode/compile errors, an unready Editor, sandbox visibility and a wrong target. Use bounded waits and diagnostics; do not silently switch Editors, delete caches or change versions. Report the effective versions, verified result and unresolved blocker.

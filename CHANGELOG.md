@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0 — 2026-11-13
+
+- Verify stable Unity CLI 1.0.0 locally and in the live feed; Pipeline remains 1.0.0.
+- Refresh supported versions, installation prerequisites, stable/beta channel guidance, Hub pinning and post-update verification.
+- Document CLI output flag conventions, guarded Editor closing, changed exit codes and Pipeline 1.0 compatibility fixes.
+- Add live command help, MCP tool grouping/filtering, client configuration migration and managed CLI tool guidance.
+- Cover credential-store changes, headless imports, build result validation and final NDJSON/interruption handling. Live Editor/Player/MCP validation remains pending.
+
 ## 1.5.0 — 2026-11-12
 
 - Confirm Pipeline 1.0.0 in the live registry and review its first stable release; Unity CLI remains beta.17 locally and in the update feed.

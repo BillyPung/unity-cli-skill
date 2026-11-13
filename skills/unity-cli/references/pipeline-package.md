@@ -2,11 +2,11 @@
 
 Documentation baseline is `com.unity.pipeline` 1.0.0, the first stable package release. Live commands require Unity 6+ and a compiled package; individual features can require newer Editors. Preserve existing project pins when choosing versions. Runtime Pipeline remains experimental for desktop Players.
 
-The live registry confirmed 1.0.0 as latest on 2026-11-12. This baseline is a documentation review, with live Editor/Player validation pending. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
+The live registry confirmed 1.0.0 as latest on 2026-11-13. This baseline is a documentation review, with live Editor/Player validation pending. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
 
 ## Installation and discovery
 
-Inspect `pipeline install --help` first. The local beta.17 accepts `--version` for a package pin. Some older binaries used `--package-version`.
+Inspect `pipeline install --help` first. The local CLI 1.0 accepts `--version` for a package pin. Some older binaries used `--package-version`.
 
 ```sh
 unity pipeline install --project-path <absolute-project>
@@ -32,7 +32,7 @@ unity command --project-path <absolute-project> script eval -- --code "return Un
 
 Flat names from 0.4, such as `editor_status` and `runtime_status`, no longer redirect in 1.0, and the catalog no longer lists them. Older packages may support `--obsolete-command-names` to map replacements; do not depend on that listing for 1.0 migration. Use `script eval`, or `script eval -- --file <path.cs>` for a file: `script eval_file` has been removed. Top-level `unity eval` is absent in CLI beta.14.
 
-CLI beta.17 supports `--port`, `--pid`, and `--instance` for explicit Editor selection. For worktrees always target the owning project. Listings use `--group-by`; Pipeline 1.0 refuses the old `group_by` key. Listing filters, detail and paging reduce large responses.
+CLI 1.0 supports `--port`, `--pid`, and `--instance` for explicit Editor selection. For worktrees always target the owning project. Listings use `--group-by`; Pipeline 1.0 refuses the old `group_by` key. Listing filters, detail and paging reduce large responses. CLI 1.0 also reads command help directly from the Editor, for example `unity command --project-path <absolute-project> component get_fields --help`.
 
 Put Pipeline arguments after `--` to prevent collisions with CLI flags. In the 1.0 schema both the CLI timeout and `script eval`'s `timeout` are seconds; code helpers such as `Wait.Until(..., timeoutMs: ...)` use milliseconds. An eval request timing out can leave the script running detached; inspect existing work before retrying. Prefer an explicit detached job for long waits. Inspect the live schema for other timeout contracts.
 

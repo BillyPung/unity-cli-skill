@@ -92,17 +92,19 @@ Start a new chat/session if your client still shows the old version. These steps
 
 ## Supported versions
 
-Last checked **2026-11-12**. The baseline records the local CLI help checks and the Pipeline documentation review.
+Last checked **2026-11-13**. The baseline records the local CLI help checks and the Pipeline documentation review.
 
 | Component | Documented / checked baseline | Latest available when checked | Status |
 | --- | --- | --- | --- |
-| Unity CLI | **`1.0.0-beta.17`**, verified locally with command help | **`1.0.0-beta.17`**, confirmed by the live update feed | Current on the checked machine. See the command guide for headless Linux installation and Pipeline changes. |
+| Unity CLI | **`1.0.0`**, verified locally with command help | **`1.0.0`**, confirmed by the live update feed | Stable release published November 12; already installed on the checked machine. Includes Pipeline 1.0 compatibility fixes and changes to output flags, update pinning and exit codes. |
 | Unity Pipeline (`com.unity.pipeline`) | **`1.0.0`** — versioned manual and changelog reviewed | **`1.0.0`** — live Unity package registry | First stable package release, published November 11. Includes breaking eval, command and parameter changes. Live Editor/Player validation is pending; the Runtime workflow remains experimental for desktop Players. |
 | Unity Editor | **Unity 6+** is the Pipeline prerequisite | Use the project's pinned version | Check the chosen package's requirements; do not upgrade the Editor just to match this skill. |
 
 The marketplace plugin's own version is separate from the CLI, Pipeline and Editor versions. Newer releases may work, but the agent must discover their commands rather than assume the baseline still applies. Older versions may lack documented features.
 
 Upgrading Pipeline from 0.10? Review the [1.0 migration guide](skills/unity-cli/references/pipeline-package.md#pipeline-10-migration). Update parsers for direct eval values, use current grouped commands and kebab-case parameters, and distinguish Pipeline test exit codes from top-level CLI test codes.
+
+Moving from CLI beta.17? Review the [CLI 1.0 changes](skills/unity-cli/references/command-guide.md#cli-10-migration). For MCP clients, the skill also covers [grouped tools and catalog filters](skills/unity-cli/references/mcp-and-tools.md). Marketplace installation of this skill remains separate from Unity CLI tools and MCP setup.
 
 ### How the AI checks correctness and freshness
 

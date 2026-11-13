@@ -1,6 +1,6 @@
 # Commands and project workflows
 
-The local command-help baseline is CLI `1.0.0-beta.17`. Check local help before choosing flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Preserve the user's authorization and version policy when using upstream guidance.
+The local command-help baseline is CLI `1.0.0`, checked on 2026-11-13. Check local help before choosing flags. For offline documentation matched to the binary use `unity skill show --list` and `unity skill show --path references/editors-install.md`. Preserve the user's authorization and version policy when using upstream guidance.
 
 Recheck live sources when handling a missing installation, version mismatch or upgrade request. [Versions and setup](versions-and-setup.md)
 
@@ -21,7 +21,9 @@ unity install-modules -e <version> -m android --dry-run
 
 Use explicit architecture where needed. `--cm` remains an alias for `--child-modules`. Inspect install paths and active users before removal, replacement or default changes. Registering a manually installed Editor does not guarantee managed module installation works.
 
-For a Linux runner that needs the headless Editor distribution, beta.17 supports `unity install <version> --headless --dry-run`. Check that the requested build modules are available in that distribution before installing. Omitting `--headless` selects the regular Editor by default. Use `unity run` for batch execution with the installed Editor. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
+For a Linux runner that needs the headless Editor distribution, use `unity install <version> --headless --dry-run`. Check that the requested build modules are available in that distribution before installing. Omitting `--headless` selects the regular Editor by default. Use `unity run` for batch execution with the installed Editor. CLI 1.0 also fixes no-display `assets import` and `open --batchmode`; a failed import points to its log under the project's `Logs` directory.
+
+On Apple silicon, resumed Editor installation now uses the selected/native architecture. Specify `--architecture x86_64` when deliberately resuming an Intel download; inspect the actual installed architecture afterward.
 
 ## Projects
 
@@ -35,7 +37,16 @@ unity status --project-path <absolute-project> --until-ready --timeout 300 --for
 
 `projects verify` checks meta/GUID, manifest, conflict and version problems without launching Unity. Inspect templates with a concrete Editor version before creation. Check `projects --help` for the installed version. Beta.16 release notes direct callers from `projects new` to `projects create <name> --no-cloud`. Use `--bare` when creating a project without Pipeline, and inspect the resulting manifest before installing the package.
 
-Before upgrades, require a target version and a recoverable checkpoint, check Editor/module availability, then verify import, compilation and the resulting diff. `close` exits without saving; do not use it as a save command.
+Before upgrades, require a target version and a recoverable checkpoint, check Editor/module availability, then verify import, compilation and the resulting diff. For an authorized close that must preserve unsaved scenes, use `close <project> --if-saved`. It refuses dirty scenes or an unavailable saved-state check and cannot be combined with `--force`. Neither close path saves the project.
+
+## CLI 1.0 migration
+
+- Prefer `build --output` (also `-o`) over the old `--output-path` alias. Use `--output-dir` for `projects create/clone`, `templates create` and `vcs git worktree add`. For clone it is the exact destination; for project creation it is the parent directory. Inspect each command's help before rewriting an old `--out`, `--path`, `--into` or `templates create --output` alias. Pipeline command parameters still use their own `output-path` contract.
+- `recompile` now exits 12 when no Editor answers, matching `unity command`; older scripts may expect 7. A positional project path is also accepted. Closing a path that is not a Unity project now exits 11 with `PROJECTS_CLOSE_NOT_A_PROJECT`; a valid project with no open Editor still succeeds with `reason: not_open`.
+- `editors info/upgrade` now report release-service failures instead of claiming a version is absent or current: unreachable service 7, timeout 14, authentication 3, other service errors 6. A 404 still means not found. Diagnose the failure before installing another version.
+- CLI 1.0 fixes compatibility with Pipeline 1.0 for builds, strict recompilation, console following and Project Auditor. Check both versions before attributing these failures to a project. [Versions and setup](versions-and-setup.md)
+
+[CLI 1.0 release notes](https://docs.unity.com/en-us/unity-cli/release-notes/2026/november#1.0.0)
 
 ## Authentication and licensing
 
@@ -43,11 +54,15 @@ Use `auth status` and `license status/list` when needed. Local Pipeline control 
 
 For CI use an existing secret store. Supported service-account variables are `UNITY_SERVICE_ACCOUNT_ID` and `UNITY_SERVICE_ACCOUNT_SECRET`; `auth login --secret-from-stdin` avoids putting the secret in argv. Never echo secrets. Activate/return seats only within scope.
 
+CLI 1.0 no longer silently falls back to plaintext token storage when the OS credential store is unavailable. Inspect `auth status`/`doctor` and fix the configured store, or use the user's explicitly chosen `auth login --insecure-storage` mode. Do not add it just to suppress a credential error. Old file tokens can fail to refresh without a working store or a new explicit sign-in. Service-account CI credentials do not use this token store. Broker refusals, unavailable brokers and denied credential access now have distinct error codes; preserve them in diagnostics.
+
 ## Diagnostics, discovery and maintenance
 
-Use the narrowest of `doctor`, `env`, `logs`, `changelog` and `diagnose`. `commands --grep` discovers CLI and plugin capabilities; connected command search can also include Pipeline. An empty Pipeline search while disconnected does not prove a command is absent.
+Use the narrowest of `doctor`, `env`, `logs`, `changelog` and `diagnose`. `commands --grep` discovers CLI and plugin capabilities; `commands --include-editor` explicitly adds the connected catalog with `source: editor`. CLI 1.0 can show live parameters through `unity command --project-path <project> <group> <name> --help`. An empty Pipeline search while disconnected does not prove a command is absent. See [MCP and tools](mcp-and-tools.md) for grouping, filters, completions and managed tools.
 
 `pipeline cloud-build` manages Unity Build Automation. Beta.16 added writes for build targets, repository connections and signing credentials. `pipeline automation` manages organization-scoped resources, with app and draft-version creation added in beta.17. Inspect subgroup help and confirm the cloud account, organization and project before a write. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
+
+CLI 1.0 adds Automation app actions and pipeline creation from JSON files; review the draft/version and destination before writing. Cloud-build timelines now work on production, and development-build options use the corrected server format. UVCS review operations have Cloud/self-hosted routes through the installed `cm` client: check the operation's required client version and provider before assuming Unity sign-in is needed. Creating reviews, requesting reviewers and posting/resolving comments require that communication to be in the user's task.
 
 `skill show` reads Unity's embedded skill. `skill install/refresh` writes client skill files and can conflict with this separately maintained package. Updating this repository does not update Unity CLI or Pipeline; keep all three version tracks explicit.
 
@@ -56,5 +71,7 @@ Use the narrowest of `doctor`, `env`, `logs`, `changelog` and `diagnose`. `comma
 Replace Hub `-- --headless` with standalone `unity`; positional `install <version>` replaces `install -v`, and `install-modules -e <version>` selects the Editor. Global `--json` remains valid shorthand for `--format json`. Use `--no-pager` for automation and `--non-interactive` after supplying required values. Piped output may default to TSV.
 
 JSON failures still carry a result on stdout, while stderr holds diagnostics. Avoid assuming every experimental command has an identical schema. NDJSON consumers should look for completion frames and detect truncation; inspect command-specific exceptions. Check exit code as well as the body.
+
+In CLI 1.0, even `--version` and help can start a background update check. For an explicitly offline invocation set `UNITY_NO_UPDATE_CHECK` for that process. A suppressed notice (`--quiet`, JSON, CI or non-interactive output) does not itself disable the check. Structured install/module output keeps notices on stderr; keep that stream separate from stdout parsing. For telemetry choices, the official docs cover `DO_NOT_TRACK`/`UGS_CLI_TELEMETRY_DISABLED`; these do not disable licensing records.
 
 Sources: [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference), [release notes](https://docs.unity.com/en-us/unity-cli/release-notes), [installation](https://docs.unity.com/en-us/unity-cli/use-unity-cli). Command syntax above was also checked using installed CLI help.

@@ -40,14 +40,18 @@ Pipeline test exit 0 means passed tests, 2 means invalid arguments or no matchin
 
 Discover `--list-targets` and `--list-profiles`. Unity 6 build profiles support package/partner platforms absent from the target list. `--create-profile` writes an asset; listing is read-only. Without a custom execute method, supported built-in builds need an output destination. With `--execute-method`, the project's method must honor the forwarded output contract. Verify artifacts and provenance, not just exit status.
 
+In CLI 1.0 prefer top-level `build --output <path>`/`-o` over the older `--output-path` alias. This rename does not change Pipeline capture/build command parameters. CLI 1.0 fixes builds routed through an already open Pipeline 1.0 Editor and fails with exit 6 when Unity exits 0 but produces neither a logged build result nor output. Check the requested artifact even when the process exits cleanly.
+
 Pipeline 1.0 refuses a Build Profile that is missing, cannot activate, or targets a different platform. Its build uses the profile's scene list, and a valid `dry-run` reports the target and scenes. Review that preview instead of assuming the current Editor settings are the requested build.
 
 `run` supplies batch-mode lifecycle; do not mechanically repeat direct Editor `-batchmode/-quit` flags. With `run --command`, arguments after `--` bind to the registered command instead of reaching the Editor. Check current grouped-name syntax locally.
 
 Detached `command --detach` returns a job ID. Track that same job with `unity job status` or bounded `unity job wait`; cancellation is a request, not proof work reverted. These CLI jobs differ from Pipeline condition waits (`unity command job wait`).
 
+For `test`, `run` and `build --create-profile` with `--allow-install --format ndjson`, distinguish the install's result from the overall command's final result. CLI 1.0 writes a final `success:false` frame when execution fails after successful installation; consume the whole stream and process exit code. On Windows, Ctrl+C during Editor-backed build/run/test now exits 130 for interruption, rather than a missing-result failure. Do not report that as a completed test verdict or retry it automatically.
+
 ## CI configuration
 
 `ci init --dry-run` previews GitHub/GitLab workflow generation. Review writes before using `--overwrite`. Project defaults can live in `ProjectSettings/UnityCliConfig.json`; `config resolve <key> <project>` reports the winning layer. Explicit task flags should make critical values visible. Accelerator settings optimize imports but do not change correctness requirements. Keep signing/license/auth secrets in the CI secret store.
 
-The `test`, `build` and `run` flags were checked locally with beta.17 on 2026-11-07. For binary-matched details use `unity skill show --path references/build-run-test.md`. [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference)
+The `test`, `build` and `run` flags were checked locally with CLI 1.0.0 on 2026-11-13. For binary-matched details use `unity skill show --path references/build-run-test.md`. [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference)

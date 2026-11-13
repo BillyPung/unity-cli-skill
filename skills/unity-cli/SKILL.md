@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-12 the live feeds reported CLI 1.0.0-beta.17 and Pipeline 1.0.0. The local CLI matches beta.17. Pipeline 1.0 guidance comes from Unity's manual and changelog; live Editor/Player validation is pending. Treat latest available, locally checked and project-pinned versions as separate facts.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-13 the live feeds reported CLI 1.0.0 and Pipeline 1.0.0. The local CLI matches 1.0.0. Pipeline 1.0 guidance comes from Unity's manual and changelog; live Editor/Player validation is pending. Treat latest available, locally checked and project-pinned versions as separate facts.
 
 ## Resolve and inspect
 
@@ -41,6 +41,7 @@ For installation/update of this skill plugin itself, use the host's native marke
 | Version correctness/freshness, CLI installation/update, Pipeline installation/update | [Versions and setup](references/versions-and-setup.md) |
 | Editors, modules, projects, authentication, migration or diagnostics | [Command guide](references/command-guide.md) |
 | Live Editor/Player commands, custom commands, package setup or Method Reload | [Pipeline guide](references/pipeline-package.md) |
+| MCP clients, tool grouping/filtering, managed CLI tools or command discovery | [MCP and tools](references/mcp-and-tools.md) |
 | Builds, tests, reports, sharding, detached jobs or CI | [CI and validation](references/ci-and-validation.md) |
 | Play-mode verification, screenshots and console checks | [Play-mode loop](references/playmode-verification.md) |
 
@@ -60,3 +61,5 @@ Use JSON for one result and NDJSON for supported progress streams. Inspect the e
 Poll the existing operation until terminal state; acceptance is not completion. Verify installed modules, build artifacts, XML test reports, or saved scene/asset diffs as appropriate. For top-level `unity test`, exit 8 means a completed suite with failures; exit 6 means the run failed without a completed verdict. Pipeline `test run/status` instead use 6 for test failures or run errors; inspect their results and diagnostics. Investigate before retrying.
 
 For connection failures distinguish package loading, Safe Mode/compile errors, an unready Editor, sandbox visibility and a wrong target. Use bounded waits and diagnostics; do not silently switch Editors, delete caches or change versions. Report the effective versions, verified result and unresolved blocker.
+
+With CLI 1.0, an unanswered `recompile` exits 12 rather than 7, and closing an invalid project path exits 11. Check [CLI migration guidance](references/command-guide.md#cli-10-migration) when older automation assumes different exit codes or output flags. Prefer `close --if-saved` for an authorized close that must preserve unsaved scenes; it does not save them.

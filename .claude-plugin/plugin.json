@@ -1,6 +1,6 @@
 {
   "name": "unity-cli",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Bring your coding agent into Unity: inspect projects, drive the Editor, and build and test with current CLI guidance.",
   "author": {
     "name": "BillyPung"

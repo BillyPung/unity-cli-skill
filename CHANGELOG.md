@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.1 — 2026-11-19
+
+- Document Unity CLI 1.0.1 from the release notes and live update feed. The installed CLI was 1.0.0 and the Pipeline registry still reports 1.0.0.
+- Update guidance for raw cache keys and workflow previews, TSV headers, NDJSON paging and update results, and shell completion envelopes.
+- Document command catalog paths, MCP group filters and the status tool's exclusion behavior.
+
 ## 1.6.0 — 2026-11-13
 
 - Verify stable Unity CLI 1.0.0 locally and in the live feed; Pipeline remains 1.0.0.

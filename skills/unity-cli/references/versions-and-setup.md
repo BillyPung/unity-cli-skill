@@ -1,10 +1,10 @@
 # Versions, installation and updates
 
-## Checked state on 2026-11-13
+## Checked state on 2026-11-19
 
 | Component | Latest found | Evidence and limits |
 | --- | --- | --- |
-| Unity CLI | `1.0.0` | Local version and selected command help match 1.0.0. The live update feed and November release notes confirm the stable release, published November 12. |
+| Unity CLI | `1.0.1` | Local CLI is 1.0.0. The live update feed and November release notes confirm 1.0.1, published November 16. See the [1.0.1 output changes](command-guide.md#cli-101-output-changes). |
 | `com.unity.pipeline` | `1.0.0` | Live registry and versioned 1.0 documentation agree. First stable package release on November 11; review covers documentation and command guidance, with live Editor/Player validation pending. Runtime remains experimental for desktop Players. |
 | Unity Editor | Unity 6+ for Pipeline | Prerequisite, not a tested Editor matrix. Keep the version in `ProjectSettings/ProjectVersion.txt`; check the selected package's own requirements. |
 
@@ -18,7 +18,7 @@ This snapshot is not a permanent latest-version claim or a promise that all comb
 4. Compare versions with SemVer. For example, stable CLI `1.0.0` follows `1.0.0-beta.17`, and stable Pipeline `1.0.0` follows `1.0.0-pre.1` and `0.10.0-exp.1`. Preserve deliberate team pins and check the features needed by the task. A stable package label does not make every workflow stable: Runtime Pipeline remains experimental in 1.0.
 5. Discover the running package's command schema and confirm the exact target with `unity status --project-path <absolute-project> --format json`. A current package can still be unavailable because it has not compiled/loaded.
 
-Report installed, requested/resolved and latest available versions separately, with the check date and CLI update channel. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` and follow the public release-notes index into its year/month pages. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-13 the live package list contained 1.0.0 and the `@latest` documentation redirect pointed to the 1.0 manual. A feed's shorter list is not evidence that an existing prerelease pin is corrupt or should be removed.
+Report installed, requested/resolved and latest available versions separately, with the check date and CLI update channel. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` and follow the public release-notes index into its year/month pages. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-19 the live package list contained 1.0.0 and the `@latest` documentation redirect pointed to the 1.0 manual. Check existing prerelease pins against the project's version policy before changing them.
 
 ## Install Unity CLI
 
@@ -55,6 +55,8 @@ The last mutating step requires update scope. In CLI 1.0, `self-update --target 
 
 Inspect the update result's `installed`, `installedVersion` when supplied (not for MSIX), and `appliesAfterExit`. Re-resolve `unity --version` after the update process exits, rather than treating a scheduled replacement or a no-op as an installed target. Re-read command help after updating. MSIX can update in the background and has no rollback; other install types also need their own rollback check. An offline check never proves a pin is current.
 
+Prefer explicit JSON for version checks and dry runs across versions. With 1.0.1, TSV checks and dry runs use key/value rows, and NDJSON emits one result frame with the JSON fields. Review older scripts that parse the previous output layout.
+
 ## Install or update Pipeline in the intended project
 
 Require a compatible Editor and a recoverable source-control state. Read `pipeline install --help` and `pipeline upgrade --help`. The local CLI 1.0 uses `--version`. Some older binaries used `--package-version`. Preserve existing Git and local dependencies unless the requested change includes replacing their source.
@@ -73,6 +75,8 @@ For an existing registry package, verify the latest release suits the project be
 ```sh
 unity pipeline upgrade --project-path <absolute-project>
 ```
+
+CLI 1.0.1 can fall back to a running Editor when the shell's working directory was deleted. Keep the absolute `--project-path` on install and upgrade so discovery does not choose another project.
 
 To deliberately select a specific available version, use the explicit install pin after reviewing help; it overwrites an existing package version. `--force` is not needed as a routine update shortcut. Do not assume Pipeline offers `--dry-run`; use only flags in installed help.
 

@@ -19,7 +19,7 @@ For top-level `unity test`, exit 8 means tests completed with failures; 6 means 
 
 When setting both `--output` and `--junit-output`, give them distinct destination files. Beta.17 rejects a JUnit path that resolves to the same file as the NUnit report. [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes)
 
-`--shard N/M` requires an appropriate full-suite inventory via `--shard-inventory`. Do not run simultaneous Editors on the same project directory; use isolated CI checkouts. `--retries` reports flakes; keep failures visible. `--rerun-failed` consumes the prior report. `--affected` uses impact information and can fall back to all tests; use `--affected-compare` when assessing selection coverage. Coverage requires the project's Code Coverage package. `watch test` is a development loop, not an unattended CI step.
+`--shard N/M` requires an appropriate full-suite inventory via `--shard-inventory`. Do not run simultaneous Editors on the same project directory; use isolated CI checkouts. `--retries` reports flakes; keep failures visible. `--rerun-failed` consumes the prior report. With CLI 1.0.1, filters used with sharding and reruns must be valid Rust regexes. Plain `unity test --filter` still forwards its filter to the Editor. `--affected` uses impact information and can fall back to all tests; use `--affected-compare` when assessing selection coverage. Coverage requires the project's Code Coverage package. `watch test` is a development loop, not an unattended CI step.
 
 ## Live Pipeline tests
 
@@ -53,5 +53,7 @@ For `test`, `run` and `build --create-profile` with `--allow-install --format nd
 ## CI configuration
 
 `ci init --dry-run` previews GitHub/GitLab workflow generation. Review writes before using `--overwrite`. Project defaults can live in `ProjectSettings/UnityCliConfig.json`; `config resolve <key> <project>` reports the winning layer. Explicit task flags should make critical values visible. Accelerator settings optimize imports but do not change correctness requirements. Keep signing/license/auth secrets in the CI secret store.
+
+With CLI 1.0.1, a bare invocation of `unity cache key` in an older generated GitHub Actions workflow can capture TSV where the cache step expects one value. Update the existing invocation to `unity cache key --format human`, preserving its project and other flags. Use `unity ci init --dry-run --format human` when capturing raw workflow YAML. Review the existing workflow before regenerating it because teams may have customized the steps and cache policy.
 
 The `test`, `build` and `run` flags were checked locally with CLI 1.0.0 on 2026-11-13. For binary-matched details use `unity skill show --path references/build-run-test.md`. [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference)

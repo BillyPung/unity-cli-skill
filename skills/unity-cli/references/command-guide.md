@@ -74,4 +74,14 @@ JSON failures still carry a result on stdout, while stderr holds diagnostics. Av
 
 In CLI 1.0, even `--version` and help can start a background update check. For an explicitly offline invocation set `UNITY_NO_UPDATE_CHECK` for that process. A suppressed notice (`--quiet`, JSON, CI or non-interactive output) does not itself disable the check. Structured install/module output keeps notices on stderr; keep that stream separate from stdout parsing. For telemetry choices, the official docs cover `DO_NOT_TRACK`/`UGS_CLI_TELEMETRY_DISABLED`; these do not disable licensing records.
 
+### CLI 1.0.1 output changes
+
+- Piped output defaults to TSV for many commands. Version, configuration, cache-key and update-check commands now use a `key`/`value` header and one row per field. Other commands such as `editors`, `projects create` and `ci init` add table headers. `--no-header` removes the header row only. Request JSON and parse the documented keys for structured use.
+- Use `--format human` for bare `cache key`, `editors path`, `docs --url` or raw `ci init --dry-run` YAML. Treat token output as secret regardless of format. `commands` JSON and NDJSON add a full command `path`, such as `analytics opt-in`. `editors path --format ndjson` now emits a single result frame.
+- `logs --format ndjson` now includes `total`, `nextPage` and `partial` in its final result frame. Read through that frame and check any paging metadata. TSV from `builds log` and `jobs logs` starts with a `line` header unless `--no-header` is set.
+- `commands --grep` accepts Rust regex syntax. Replace patterns using lookaround or backreferences and escape literal braces. Numeric flags such as `--port` and `--limit` require whole numbers in plain decimal. `collab read --timestamp` accepts ISO 8601 dates or RFC 3339/ISO 8601 date-times.
+- CLI 1.0.1 redacts remote URL credentials across schemes in `projects unlink vcs` output. Keep credential-bearing remote URLs out of shared diagnostics, especially when working with an older CLI.
+
+[CLI 1.0.1 release notes](https://docs.unity.com/en-us/unity-cli/release-notes/2026/november#1.0.1)
+
 Sources: [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference), [release notes](https://docs.unity.com/en-us/unity-cli/release-notes), [installation](https://docs.unity.com/en-us/unity-cli/use-unity-cli). Command syntax above was also checked using installed CLI help.

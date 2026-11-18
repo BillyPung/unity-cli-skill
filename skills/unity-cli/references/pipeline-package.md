@@ -2,7 +2,7 @@
 
 Documentation baseline is `com.unity.pipeline` 1.0.0, the first stable package release. Live commands require Unity 6+ and a compiled package; individual features can require newer Editors. Preserve existing project pins when choosing versions. Runtime Pipeline remains experimental for desktop Players.
 
-The live registry confirmed 1.0.0 as latest on 2026-11-13. This baseline is a documentation review, with live Editor/Player validation pending. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
+The live registry confirmed 1.0.0 as latest on 2026-11-19. This baseline is a documentation review, with live Editor/Player validation pending. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
 
 ## Installation and discovery
 

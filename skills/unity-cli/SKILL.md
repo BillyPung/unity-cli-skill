@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.6.0"
+  version: "1.6.1"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-13 the live feeds reported CLI 1.0.0 and Pipeline 1.0.0. The local CLI matches 1.0.0. Pipeline 1.0 guidance comes from Unity's manual and changelog; live Editor/Player validation is pending. Treat latest available, locally checked and project-pinned versions as separate facts.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-19 the live feeds reported CLI 1.0.1 and Pipeline 1.0.0. The installed CLI was 1.0.0. The 1.0.1 guidance follows Unity's release notes. Pipeline 1.0 guidance follows Unity's manual and changelog, with live Editor/Player validation pending. Check the intended project's resolved version separately.
 
 ## Resolve and inspect
 
@@ -63,3 +63,5 @@ Poll the existing operation until terminal state; acceptance is not completion. 
 For connection failures distinguish package loading, Safe Mode/compile errors, an unready Editor, sandbox visibility and a wrong target. Use bounded waits and diagnostics; do not silently switch Editors, delete caches or change versions. Report the effective versions, verified result and unresolved blocker.
 
 With CLI 1.0, an unanswered `recompile` exits 12 rather than 7, and closing an invalid project path exits 11. Check [CLI migration guidance](references/command-guide.md#cli-10-migration) when older automation assumes different exit codes or output flags. Prefer `close --if-saved` for an authorized close that must preserve unsaved scenes; it does not save them.
+
+With CLI 1.0.1, request an explicit format when capturing piped output. Older generated CI workflows need `unity cache key --format human` for the bare key. See [output changes](references/command-guide.md#cli-101-output-changes) for TSV headers, NDJSON paging and shell completions.

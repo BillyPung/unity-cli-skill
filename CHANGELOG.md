@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0 — 2026-11-27
+
+- Document Unity CLI 1.1.0 from Unity's update feed and CLI changelog. The installed CLI reported 1.0.0.
+- Document Pipeline 1.0.1 and its Auto Tick callback fix. Add the CLI 1.1 Editor compatibility check and package-only setup with `--no-skill`.
+- Update Editor targeting, readiness, modal dialog handling, and recovery after a dropped connection.
+- Cover CLI 1.1 Linux requirements, Android/profile builds, and Cloud Build and Pipeline Automation changes.
+
 ## 1.6.1 — 2026-11-19
 
 - Document Unity CLI 1.0.1 from the release notes and live update feed. The installed CLI was 1.0.0 and the Pipeline registry still reports 1.0.0.

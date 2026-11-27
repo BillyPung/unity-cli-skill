@@ -85,3 +85,14 @@ In CLI 1.0, even `--version` and help can start a background update check. For a
 [CLI 1.0.1 release notes](https://docs.unity.com/en-us/unity-cli/release-notes/2026/november#1.0.1)
 
 Sources: [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference), [release notes](https://docs.unity.com/en-us/unity-cli/release-notes), [installation](https://docs.unity.com/en-us/unity-cli/use-unity-cli). Command syntax above was also checked using installed CLI help.
+
+## CLI 1.1 changes
+
+- Editor and module installers can download up to three files in parallel. Set `UNITY_INSTALL_MAX_CONCURRENT_DOWNLOADS` from 1 to 16 when the environment needs a different limit. A missing installed Editor now returns exit 11 / `EDITOR_NOT_INSTALLED` from commands such as `editors path` and `install-modules`. Several project, template, and asset commands also use exit 11 for missing inputs.
+- A modal dialog now blocks `close` with exit 18, `PROJECTS_CLOSE_BLOCKED_BY_DIALOG` and reason `blocked_by_dialog`. Inspect the dialog before retrying. See [Editor targeting and recovery](pipeline-package.md#editor-targeting-and-recovery-in-cli-11) for the matching command behavior.
+- `projects create` reports `templateVersion` in machine output and can report `TEMPLATE_OTHER_VERSION_ON_DISK` when another installation has a newer template. Check the actual template and Editor selection. For an interrupted `projects create` or `vcs setup`, check JSON or NDJSON for `data.orphanResource` before deciding how to handle an already-created remote.
+- `docs toc --format json` adds `markdownUrl` for the scripting reference and manual. Read that URL for Markdown and keep the existing `url` as the HTML citation.
+- A proxy environment variable that points to a PAC script now causes exit 2 / `INVALID_COMMAND_ARGS`. A PAC in the proxy settings file still produces exit 1. For Pipeline Automation, a failed token exchange due to network or gateway errors returns exit 7 / `NETWORK_UNREACHABLE`. Check connectivity before retrying sign-in.
+- Use `pipeline automation pipelines validate` to check a pipeline JSON without saving or starting a job. `pipelines run` starts a job. CLI 1.1 also adds draft version, action, event and schedule operations. Treat publishing, visibility changes, deletions, and signing credential generation/uploads as separate changes with their own scope. Preview or validate the draft before applying the requested cloud operation.
+
+[CLI 1.1.0 changelog](https://public-cdn.cloud.unity3d.com/hub/prod/cli/1.1.0/CHANGELOG.md)

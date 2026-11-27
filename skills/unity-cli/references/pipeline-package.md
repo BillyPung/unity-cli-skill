@@ -1,15 +1,15 @@
 # Unity Pipeline
 
-Documentation baseline is `com.unity.pipeline` 1.0.0, the first stable package release. Live commands require Unity 6+ and a compiled package; individual features can require newer Editors. Preserve existing project pins when choosing versions. Runtime Pipeline remains experimental for desktop Players.
+Documentation baseline is `com.unity.pipeline` 1.0.1. Live commands require a compatible Unity 6+ Editor and a compiled package. Check the 6000.5.0–6000.5.2 compatibility exception and any feature-specific Editor requirements. Preserve existing project pins. Runtime Pipeline remains experimental for desktop Players.
 
-The live registry confirmed 1.0.0 as latest on 2026-11-19. This baseline is a documentation review, with live Editor/Player validation pending. Recheck the registry and resolved dependency before updating. [Versions and setup](versions-and-setup.md)
+The live registry confirmed 1.0.1 as latest on 2026-11-27. This patch fixes `EditorApplication.delayCall` processing when Auto Tick is enabled and the Editor is unfocused or minimized. Live Editor/Player validation is pending. [Versions and setup](versions-and-setup.md) · [Pipeline changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/changelog/CHANGELOG.html)
 
 ## Installation and discovery
 
-Inspect `pipeline install --help` first. The local CLI 1.0 accepts `--version` for a package pin. Some older binaries used `--package-version`.
+Inspect `pipeline install --help` first. CLI 1.0 accepts `--version` for a package pin. Some older binaries used `--package-version`. In CLI 1.1 use `--no-skill` for package-only setup as shown below.
 
 ```sh
-unity pipeline install --project-path <absolute-project>
+unity pipeline install --project-path <absolute-project> --no-skill
 unity pipeline list
 unity status --project-path <absolute-project> --until-ready --timeout 300 --format json
 unity command --project-path <absolute-project>
@@ -35,6 +35,15 @@ Flat names from 0.4, such as `editor_status` and `runtime_status`, no longer red
 CLI 1.0 supports `--port`, `--pid`, and `--instance` for explicit Editor selection. For worktrees always target the owning project. Listings use `--group-by`; Pipeline 1.0 refuses the old `group_by` key. Listing filters, detail and paging reduce large responses. CLI 1.0 also reads command help directly from the Editor, for example `unity command --project-path <absolute-project> component get_fields --help`.
 
 Put Pipeline arguments after `--` to prevent collisions with CLI flags. In the 1.0 schema both the CLI timeout and `script eval`'s `timeout` are seconds; code helpers such as `Wait.Until(..., timeoutMs: ...)` use milliseconds. An eval request timing out can leave the script running detached; inspect existing work before retrying. Prefer an explicit detached job for long waits. Inspect the live schema for other timeout contracts.
+
+### Editor targeting and recovery in CLI 1.1
+
+- Pass the absolute `--project-path` for each Editor call. When run outside a project without an explicit target, the CLI can reuse the last Editor reached from that working folder. Pair `--port`, `--pid` or `--instance` with the project path. A selector that matches no Editor for that project returns exit 12 / `EDITOR_NOT_RUNNING` and lists candidates in `data.candidates` when available. Check the candidates before changing selectors.
+- CLI 1.1 can discover Editors launched without `-projectPath`. It waits through script reload or Play Mode entry within the requested timeout. `EDITOR_NOT_READY` indicates the Pipeline server did not come back in time. Check the target's readiness and any modal blocker.
+- If the Editor drops the connection before replying, `unity command` reports `EDITOR_CONNECTION_LOST` with exit 6. The command may have run. Check the expected state or poll the existing job before resubmitting a write.
+- Exit 18 means a modal dialog blocked the command. Inspect `status --until-ready --format json` for `blockedBy` on the intended project. A streamed JSON/NDJSON reply may still say `EDITOR_TIMEOUT`, so use the exit code to distinguish a modal block from ordinary timeout 14. Inspect the prompt and its effect before answering or retrying.
+
+[CLI 1.1.0 changelog](https://public-cdn.cloud.unity3d.com/hub/prod/cli/1.1.0/CHANGELOG.md)
 
 ## Pipeline 1.0 migration
 

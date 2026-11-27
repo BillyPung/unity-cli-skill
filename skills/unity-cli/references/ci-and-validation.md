@@ -50,10 +50,21 @@ Detached `command --detach` returns a job ID. Track that same job with `unity jo
 
 For `test`, `run` and `build --create-profile` with `--allow-install --format ndjson`, distinguish the install's result from the overall command's final result. CLI 1.0 writes a final `success:false` frame when execution fails after successful installation; consume the whole stream and process exit code. On Windows, Ctrl+C during Editor-backed build/run/test now exits 130 for interruption, rather than a missing-result failure. Do not report that as a completed test verdict or retry it automatically.
 
+### CLI 1.1 builds
+
+- Concurrent `unity build` runs against the same project are refused. Serialize them or give concurrent workers separate project directories.
+- Use `--android-debug-key` for Android smoke builds when a debug signature is suitable. It bypasses the keystore configured in Player Settings, works with profiles, and conflicts with explicit keystore flags.
+- Android profiles now accept `--android-export-type` and `--android-version-code`. The CLI applies temporary settings and restores them after the build. Check the artifact format, version, and project diff. These flags still require a profile or a custom execute method for Android.
+- Profile builds now stamp the version requested by `--versioning-strategy`. The `semantic` and `tag` strategies fail on a dirty tree or outside a Git repo. If the profile overrides Player Settings, set the version in that profile or review whether the override should be removed before using a CLI strategy.
+
+[CLI 1.1.0 changelog](https://public-cdn.cloud.unity3d.com/hub/prod/cli/1.1.0/CHANGELOG.md)
+
 ## CI configuration
 
 `ci init --dry-run` previews GitHub/GitLab workflow generation. Review writes before using `--overwrite`. Project defaults can live in `ProjectSettings/UnityCliConfig.json`; `config resolve <key> <project>` reports the winning layer. Explicit task flags should make critical values visible. Accelerator settings optimize imports but do not change correctness requirements. Keep signing/license/auth secrets in the CI secret store.
 
 With CLI 1.0.1, a bare invocation of `unity cache key` in an older generated GitHub Actions workflow can capture TSV where the cache step expects one value. Update the existing invocation to `unity cache key --format human`, preserving its project and other flags. Use `unity ci init --dry-run --format human` when capturing raw workflow YAML. Review the existing workflow before regenerating it because teams may have customized the steps and cache policy.
+
+CLI 1.1 generates `unity build --output` in new workflows. Existing `--output-path` remains an alias. For Cloud Build using a service account, set `UNITY_SERVICE_ACCOUNT_ID` and `UNITY_SERVICE_ACCOUNT_SECRET` through the CI secret store and supply the organization ID with `--cloud-org` and the project with `--cloud-project`.
 
 The `test`, `build` and `run` flags were checked locally with CLI 1.0.0 on 2026-11-13. For binary-matched details use `unity skill show --path references/build-run-test.md`. [CLI reference](https://docs.unity.com/en-us/unity-cli/unity-cli-reference)

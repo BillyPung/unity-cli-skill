@@ -10,6 +10,8 @@ Discover the connected schema first. The guidance below targets Pipeline 1.0. Pi
 6. Read errors/exceptions with `console get` and use `console status` for cheap counters. Verify the expected gameplay/UI state, not just absence of log errors.
 7. Stop only the session you started, and restore temporary settings.
 
+In Pipeline 1.0.1, Auto Tick also runs `EditorApplication.delayCall` about every 150 ms while the Editor is unfocused or minimized. Verify game frame advancement separately. [Editor command reference](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/manual/commands/editor-lifecycle-and-observability.html)
+
 Use `--` before Pipeline flags to distinguish them from CLI flags. Long condition waits should use the package's async wait and wait-status/cancel commands rather than blocking work needed to satisfy the condition. This is separate from CLI detached jobs.
 
 Pipeline 1.0 removes `capture screenshot`. Use `capture game_view` or `capture scene_view` with `output-path`, not the old `save_path` spelling. Relative paths resolve from the project root. Absolute paths are accepted and `savedPath` is absolute. Setting `output-path` returns a path without inline base64; use `include-inline-image=true` only when both are needed. Recheck destinations when migrating a script that expected paths relative to `Assets/`.

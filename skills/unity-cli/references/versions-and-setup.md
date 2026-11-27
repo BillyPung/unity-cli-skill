@@ -1,12 +1,12 @@
 # Versions, installation and updates
 
-## Checked state on 2026-11-19
+## Checked state on 2026-11-27
 
 | Component | Latest found | Evidence and limits |
 | --- | --- | --- |
-| Unity CLI | `1.0.1` | Local CLI is 1.0.0. The live update feed and November release notes confirm 1.0.1, published November 16. See the [1.0.1 output changes](command-guide.md#cli-101-output-changes). |
-| `com.unity.pipeline` | `1.0.0` | Live registry and versioned 1.0 documentation agree. First stable package release on November 11; review covers documentation and command guidance, with live Editor/Player validation pending. Runtime remains experimental for desktop Players. |
-| Unity Editor | Unity 6+ for Pipeline | Prerequisite, not a tested Editor matrix. Keep the version in `ProjectSettings/ProjectVersion.txt`; check the selected package's own requirements. |
+| Unity CLI | `1.1.0` | Local CLI reports 1.0.0. The live update feed confirms 1.1.0, and `unity changelog --target 1.1.0` documents its changes. |
+| `com.unity.pipeline` | `1.0.1` | Live registry and 1.0 changelog agree. The patch updates Auto Tick for background Editor callbacks. Live Editor/Player validation is pending. |
+| Unity Editor | Unity 6+ for Pipeline | Read `ProjectSettings/ProjectVersion.txt` and check package requirements. CLI 1.1 blocks package setup on Unity 6000.5.0 through 6000.5.2. |
 
 This snapshot is not a permanent latest-version claim or a promise that all combinations work. The skill/plugin version in `VERSION` is a separate release track.
 
@@ -18,13 +18,13 @@ This snapshot is not a permanent latest-version claim or a promise that all comb
 4. Compare versions with SemVer. For example, stable CLI `1.0.0` follows `1.0.0-beta.17`, and stable Pipeline `1.0.0` follows `1.0.0-pre.1` and `0.10.0-exp.1`. Preserve deliberate team pins and check the features needed by the task. A stable package label does not make every workflow stable: Runtime Pipeline remains experimental in 1.0.
 5. Discover the running package's command schema and confirm the exact target with `unity status --project-path <absolute-project> --format json`. A current package can still be unavailable because it has not compiled/loaded.
 
-Report installed, requested/resolved and latest available versions separately, with the check date and CLI update channel. Report freshness as unknown when a feed fails. For CLI changes use `unity changelog --target <version>` and follow the public release-notes index into its year/month pages. For Pipeline changes check the registry first, then open the matching versioned manual and changelog. On 2026-11-19 the live package list contained 1.0.0 and the `@latest` documentation redirect pointed to the 1.0 manual. Check existing prerelease pins against the project's version policy before changing them.
+Report installed, requested/resolved and latest available versions with the check date and CLI update channel. Report freshness as unknown when a feed fails. Use `unity changelog --target <version>` for version-specific CLI changes, especially when the public release-notes index trails the feed. For Pipeline changes check the registry, then open the matching versioned manual and changelog. The `@latest` redirect points to the 1.0 manual, which covers patch 1.0.1. Check existing prerelease pins against the project's version policy before changing them.
 
 ## Install Unity CLI
 
 When the requested setup includes CLI installation, choose one existing/appropriate official channel and carry it through verification. Do not require the user to repeat authorization already given.
 
-Current CLI OS prerequisites are Windows 10 21H1+, macOS 14+, or supported Linux such as RHEL 9/Ubuntu 22.04+ with glibc 2.34+. Check the current official installation page before selecting a download; a supported Editor does not imply its host meets the CLI's requirements.
+The install guide lists Windows 10 21H1+ and macOS 14+. The CLI 1.1.0 changelog lowers the Linux minimum to glibc 2.31 and restores CLI support for Ubuntu 20.04 and Debian 11. Older releases such as 1.0.0 require glibc 2.34. Check Editor and module requirements separately. CLI 1.1 `.deb` and `.rpm` packages include Bash, Zsh and Fish completion scripts.
 
 | Environment | Install | Update through the same manager |
 | --- | --- | --- |
@@ -61,19 +61,23 @@ Prefer explicit JSON for version checks and dry runs across versions. With 1.0.1
 
 Require a compatible Editor and a recoverable source-control state. Read `pipeline install --help` and `pipeline upgrade --help`. The local CLI 1.0 uses `--version`. Some older binaries used `--package-version`. Preserve existing Git and local dependencies unless the requested change includes replacing their source.
 
+CLI 1.1 refuses Pipeline install or upgrade on Unity 6000.5.0 through 6000.5.2 with exit 6 and `PIPELINE_EDITOR_UNSUPPORTED` before changing the manifest. Pipeline cannot start on those releases. Check the project pin and plan an Editor update to 6000.5.3f1 or later on that release line when authorized. CLI 1.1 accepts `--force` for both commands, but the flag only bypasses the check.
+
+CLI 1.1 Pipeline install and upgrade can also install or update Unity's official `unity-pipeline` agent skill for the invoking agent and clients that already have a Unity skill. Edited copies are preserved. For a package-only request, add `--no-skill` after confirming it in help. On CLI 1.0, omit that flag. Update this repository's skill through its own marketplace.
+
 Before a 0.x → 1.0 upgrade, review the [migration changes](pipeline-package.md#pipeline-10-migration): removed aliases/parameter spellings, direct eval values, and changed Pipeline test results/exit codes. Update dependent scripts as part of the authorized migration. An older CLI that sends removed keys can fail with `INVALID_COMMAND_ARGS`; check its version and help rather than silently downgrading the project.
 
 CLI 1.0 includes compatibility fixes for Pipeline 1.0 builds, `recompile --strict`, `logs --console --follow` and Project Auditor. Check the client version first when beta.17 automation fails after a Pipeline upgrade; do not weaken strict validation or change the package pin as a workaround.
 
 ```sh
 unity pipeline list-versions --format json
-unity pipeline install --project-path <absolute-project> --version <agreed-package-version>
+unity pipeline install --project-path <absolute-project> --version <agreed-package-version> --no-skill
 ```
 
-For an existing registry package, verify the latest release suits the project before running the authorized update.
+For an existing registry package, verify the latest release suits the project before running the package-only update on CLI 1.1.
 
 ```sh
-unity pipeline upgrade --project-path <absolute-project>
+unity pipeline upgrade --project-path <absolute-project> --no-skill
 ```
 
 CLI 1.0.1 can fall back to a running Editor when the shell's working directory was deleted. Keep the absolute `--project-path` on install and upgrade so discovery does not choose another project.
@@ -82,4 +86,4 @@ To deliberately select a specific available version, use the explicit install pi
 
 Allow UPM resolution, refresh and compilation to finish. Re-read the manifest/lock, inspect their diff, then verify `pipeline list`, target `status --until-ready` with a bounded timeout, and live command discovery. Import/compile failures are not success. If no Editor can be started within scope, report that files were updated but live validation is pending. See [Pipeline recovery and runtime guidance](pipeline-package.md).
 
-[Official CLI install and update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli) · [CLI release notes](https://docs.unity.com/en-us/unity-cli/release-notes) · [Pipeline 1.0 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/changelog/CHANGELOG.html)
+[Official CLI install and update guidance](https://docs.unity.com/en-us/unity-cli/use-unity-cli) · [CLI 1.1.0 changelog](https://public-cdn.cloud.unity3d.com/hub/prod/cli/1.1.0/CHANGELOG.md) · [Pipeline 1.0 changelog](https://docs.unity3d.com/Packages/com.unity.pipeline@1.0/changelog/CHANGELOG.html)

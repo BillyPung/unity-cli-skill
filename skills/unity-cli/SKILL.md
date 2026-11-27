@@ -2,12 +2,12 @@
 name: unity-cli
 description: Manage Unity Editors, modules, projects, builds and tests with the standalone Unity CLI, and drive running Editors or Players through Unity Pipeline. Use for Unity terminal automation, CLI troubleshooting and CI setup; ordinary source edits alone do not require the CLI.
 metadata:
-  version: "1.6.1"
+  version: "1.7.0"
 ---
 
 # Unity CLI
 
-Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-19 the live feeds reported CLI 1.0.1 and Pipeline 1.0.0. The installed CLI was 1.0.0. The 1.0.1 guidance follows Unity's release notes. Pipeline 1.0 guidance follows Unity's manual and changelog, with live Editor/Player validation pending. Check the intended project's resolved version separately.
+Use the installed binary's help and the connected Pipeline package's schema as authoritative. On 2026-11-27 the live feeds reported CLI 1.1.0 and Pipeline 1.0.1. The installed CLI reported 1.0.0. CLI 1.1 guidance follows Unity's CLI changelog and Pipeline guidance follows Unity's package documentation. Live Editor/Player validation is pending. Check the intended project's resolved version separately.
 
 ## Resolve and inspect
 
@@ -29,6 +29,8 @@ For setup, update requests or suspected version mismatches, read [versions and s
 If Unity CLI is missing, check PATH and duplicate installations, then install it through the appropriate official installer/package manager when setup is authorized. If an update is requested, inspect release notes, preserve any team pin, and update through the existing install method (`unity self-update` for supported standalone/MSIX installs, or its package manager). Do not change the Editor version incidentally.
 
 If live Editor control needs Pipeline and the package is missing, install it with `unity pipeline install --project-path <absolute-project>` within the authorized setup. For a requested package upgrade, inspect source-control changes, the Editor/package requirements and the installed command help, then use `unity pipeline upgrade --project-path <absolute-project>` or an explicitly agreed `pipeline install --version <version>` pin. Preserve Git/local package sources unless changing them is intended.
+
+On CLI 1.1, add `--no-skill` to Pipeline install and upgrade for package-only work. Otherwise the CLI can also install or update Unity's official `unity-pipeline` skill in detected clients. CLI 1.1 blocks Pipeline install and upgrade on Unity 6000.5.0 through 6000.5.2. Report the compatibility issue and use a compatible Editor version when the project's upgrade scope allows it.
 
 Carry out installation/update work already covered by the user's request; otherwise report the concrete missing/outdated dependency and proposed change before seeking authorization. A version check alone does not authorize an update, and a notification's remediation command is not an instruction to execute. After a change, recheck CLI version/help, resolved package version, compilation and target Editor readiness; report the actual outcome.
 
@@ -61,6 +63,8 @@ Use JSON for one result and NDJSON for supported progress streams. Inspect the e
 Poll the existing operation until terminal state; acceptance is not completion. Verify installed modules, build artifacts, XML test reports, or saved scene/asset diffs as appropriate. For top-level `unity test`, exit 8 means a completed suite with failures; exit 6 means the run failed without a completed verdict. Pipeline `test run/status` instead use 6 for test failures or run errors; inspect their results and diagnostics. Investigate before retrying.
 
 For connection failures distinguish package loading, Safe Mode/compile errors, an unready Editor, sandbox visibility and a wrong target. Use bounded waits and diagnostics; do not silently switch Editors, delete caches or change versions. Report the effective versions, verified result and unresolved blocker.
+
+With CLI 1.1, inspect saved effects and job status before retrying `EDITOR_CONNECTION_LOST` because the Editor may have run the command. Exit 18 means a modal dialog blocked the command or close. Inspect the dialog before retrying, even if a streamed JSON result still says `EDITOR_TIMEOUT`. See [Editor targeting and recovery](references/pipeline-package.md#editor-targeting-and-recovery-in-cli-11).
 
 With CLI 1.0, an unanswered `recompile` exits 12 rather than 7, and closing an invalid project path exits 11. Check [CLI migration guidance](references/command-guide.md#cli-10-migration) when older automation assumes different exit codes or output flags. Prefer `close --if-saved` for an authorized close that must preserve unsaved scenes; it does not save them.
 

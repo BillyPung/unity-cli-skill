@@ -34,6 +34,8 @@ CLI 1.0.1 allows a whole MCP Editor group name, such as `editor_playmode`, in `-
 
 `mcp configure <client> --dry-run` previews a client configuration write. New CLI 1.0 entries use grouped tools. Rerunning configure over an older entry switches its tool names and can invalidate the client's existing allow list. Review that change and any project path, then apply only when client configuration is requested. `mcp configure` does not inherit `UNITY_PROJECT_PATH`; pass `--project-path` explicitly when configuring a fixed project. Verify the connected client after its reload.
 
+CLI 1.1 exits 2 for an unsupported client or an unavailable `--local` configuration mode. Keep the project path explicit because auto-discovery can reuse the last project reached from a working folder. [Editor targeting and recovery](pipeline-package.md#editor-targeting-and-recovery-in-cli-11)
+
 ## Managed Unity CLI tools
 
 `unity plugin install <id>` installs an executable Unity tool, including tools published after the current CLI. Inspect `plugin --help`, the tool identity and destination first. Managed tools come from Unity's CLI plugin CDN and are checksum-verified. `unity <id>` runs the installed tool. Separately, `unity-<name>` executables on PATH can extend dispatch; built-in commands win, and supported groups such as `cloud` can delegate an unknown subcommand to their group plugin. Check the executable's provenance before running it.
